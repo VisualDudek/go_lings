@@ -8,7 +8,13 @@ import (
 func main() {
 	s1 := []int{1, 2, 3}
 	fmt.Printf("Slice s1 Length: %d, and Capacity: %d\n", len(s1), cap(s1))
-	fmt.Printf("s1: Underlying array address: %p\n\n", unsafe.Pointer(&s1[0]))
+	fmt.Printf("s1: Underlying array address: %p\n", unsafe.Pointer(&s1[0]))
+
+	// Function Signature:
+	// func SliceData(slice []T) *T
+	// return A pointer to the first element of the slice's underlying array
+	ptr := unsafe.SliceData(s1)
+	fmt.Printf("s1: Underlying array address using unsafe.SliceData: %p\n\n", ptr)
 
 	s2 := append(s1, 4) // wydaje Ci się że robisz append na s1 a tak naprawdę dostajesz
 	// inną wiekszą tablice pod spodem
@@ -21,4 +27,8 @@ func main() {
 
 	fmt.Println(s1)
 	fmt.Println(s2)
+
+	// Albo w drugą stronę celowo chcesz "rozmnożyć" slice dlatego dajesz s2 ALE s1
+	// miało capacity na append i okazuje się że zmieniłeś wartości w s1 i s2 a
+	// chciałeś tylko w s2
 }
