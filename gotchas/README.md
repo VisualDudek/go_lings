@@ -1,3 +1,5 @@
+based on "50 Shades of Go: ..." 
+
  - lambda fn. in go ? `func(unused string) {}` 
  - `unused_vars.go` ciekwe wywołanie lambda? fn, syntax
  - *unused inmports* nie znajduje w tej chwili zastosowania
