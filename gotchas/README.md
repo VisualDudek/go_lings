@@ -6,3 +6,4 @@ based on "50 Shades of Go: ..."
  - `redeclaring_vars.go` unikaj takiej redeklaracji w multi-line
  - aha czyli moge zrobić redeklaracje w multi-line ale nie moge jeśli
  chce przypisać do Field Value // działa short decl. dla nie field struct
+ - use `go tool vet -shadow ./` to shadow catching; NO LONGER included as of Go .12+ USE staticcheck.dev
