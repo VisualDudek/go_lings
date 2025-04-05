@@ -10,3 +10,5 @@ func nilMap() {
 	var m map[string]int
 	m["one"] = 1 // error
 }
+
+// works: m := make(map[string]int)
