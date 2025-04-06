@@ -10,3 +10,4 @@ based on "50 Shades of Go: ..."
  - You can't use the `cap()` on maps. Implementacja hash mapy powoduje że nie ma fn. `cap()` nie ma sensu tak jak dla arrays i slices.
  - `011_arr_fn_args` przykład kóry ma w sobie pointery, pass by reference, pass by copy oraz lambde.
  - korzystając z `range` nie lusisz odbierać dwóch zmiennych, dla manie to taki enumerate
+ - `013` nie rozumiem drugiego sposobu
