@@ -11,3 +11,4 @@ based on "50 Shades of Go: ..."
  - `011_arr_fn_args` przykład kóry ma w sobie pointery, pass by reference, pass by copy oraz lambde.
  - korzystając z `range` nie lusisz odbierać dwóch zmiennych, dla manie to taki enumerate
  - `013` nie rozumiem drugiego sposobu
+ - `Conversions Betwween Strings and Byte Slices` chyba nie do końca rozumiem jaka gotcha jest tutaj pokazywana.
