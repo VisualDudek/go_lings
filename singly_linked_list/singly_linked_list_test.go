@@ -25,3 +25,10 @@ func TestDisplay(t *testing.T) {
 
 	list.Display()
 }
+
+func TestInsertFromSlice(t *testing.T) {
+	l := &LinkedList{}
+	l.InsertFromSlice([]int{1, 2, 3, 4})
+
+	assert.Equal(t, []int{1, 2, 3, 4}, l.ToSlice())
+}
