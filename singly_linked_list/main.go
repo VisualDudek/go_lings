@@ -1,6 +1,8 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+)
 
 type Node struct {
 	data int
@@ -37,6 +39,18 @@ func (l *LinkedList) Display() {
 	fmt.Println("nil")
 }
 
+func (l *LinkedList) ToSlice() []int {
+	current := l.head
+	res := []int{}
+
+	for current != nil {
+		res = append(res, current.data)
+		current = current.next
+	}
+
+	return res
+}
+
 func main() {
 	list := &LinkedList{}
 
@@ -45,4 +59,6 @@ func main() {
 	list.Insert(3)
 
 	list.Display()
+
+	fmt.Println(list.ToSlice())
 }
