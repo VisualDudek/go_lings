@@ -51,6 +51,12 @@ func (l *LinkedList) ToSlice() []int {
 	return res
 }
 
+func (l *LinkedList) InsertFromSlice(s []int) {
+	for _, v := range s {
+		l.Insert(v)
+	}
+}
+
 func main() {
 	list := &LinkedList{}
 
