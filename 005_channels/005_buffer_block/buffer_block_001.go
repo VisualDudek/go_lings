@@ -1,5 +1,8 @@
 package main
 
+// jakim cudem tutaj działą przewidywalnie a w `buffer_cah_async.go` można
+// przekazać do buffer channel aż 4 elementy ???
+
 import (
 	"fmt"
 	"time"
