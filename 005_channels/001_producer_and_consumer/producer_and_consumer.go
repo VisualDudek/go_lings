@@ -5,6 +5,13 @@ import (
 	"time"
 )
 
+// Both sender and receiver must be ready at the same time for the message
+// to be passed.
+// KLUCZOWE DO ZROZUMIENIA:
+// if the producer tries to send but no one is ready to receive, IT WAITS.
+// if the consumer tires to receive but no message is there yet, IT WAITS.
+// THAT'S WHY WE SAY THE COMMUNICATION IS SYNCHRONOUS! NOT ASYNC
+
 func producer(ch chan string) {
 	for i := range 5 {
 		msg := fmt.Sprintf("Message %d", i)
