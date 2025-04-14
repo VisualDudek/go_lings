@@ -22,6 +22,7 @@ func main() {
 	time.Sleep(time.Second * 3)
 	// checking if sender is blocked ??? should not be, A JEDNAK JEST
 	fmt.Println(<-ch)
+	time.Sleep(time.Second * 1)
 	fmt.Println(<-ch)
 	time.Sleep(time.Second * 1)
 }
