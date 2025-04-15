@@ -15,7 +15,7 @@ func generate() <-chan int {
 
 func main() {
 
-	for v := range generate() {
+	for v := range generate() { // tutaj kluczowe żeby załapać że idiomatyczne jest `v := range ch`
 		fmt.Println(v)
 	}
 }
