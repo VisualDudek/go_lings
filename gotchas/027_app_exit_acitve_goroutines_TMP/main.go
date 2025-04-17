@@ -20,7 +20,7 @@ func doit(workerId int, wg *sync.WaitGroup) {
 }
 
 func main() {
-	var wg sync.WaitGroup
+	var wg sync.WaitGroup // Deklaracja bez inicjalizacji, czy to jest nil ?
 	workerCount := 2
 
 	for i := range workerCount {
