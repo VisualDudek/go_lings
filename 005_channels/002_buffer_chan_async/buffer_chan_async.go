@@ -12,19 +12,20 @@ func producer(ch chan string) {
 		msg := fmt.Sprintf("Message %d", i)
 		fmt.Println("Sending:", msg)
 		ch <- msg // this won't block unless the buffer is full
+		fmt.Println("Sent:", msg)
 	}
 	close(ch)
 }
 
 func consumer(ch chan string) {
 	for msg := range ch {
-		time.Sleep(time.Second) // simulate slow processing
 		fmt.Println("Received:", msg)
+		time.Sleep(time.Second * 2) // simulate slow processing
 	}
 }
 
 func main() {
-	ch := make(chan string, 2) // buffered channel with capacity 2
+	ch := make(chan string, 1) // buffered channel with capacity 2
 	fmt.Println("Capacity of ch: ", cap(ch))
 
 	go producer(ch)
