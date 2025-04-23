@@ -2,6 +2,7 @@
 // package gotchas
 
 // missing comma in multi-line Literals
+// add comment
 
 func MissingCommaFail() {
 
