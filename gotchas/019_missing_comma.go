@@ -1,4 +1,5 @@
-package gotchas
+//go:build ignore
+// package gotchas
 
 // missing comma in multi-line Literals
 
