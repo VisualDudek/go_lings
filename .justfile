@@ -7,9 +7,9 @@ run dir=invocation_directory():
     cd {{dir}} && go run ./
 
 # Format code
-fmt:
-    go fmt ./...
+fmt dir=invocation_directory():
+    cd {{dir}} && go fmt ./...
 
 # Run go vet
-vet:
-    go vet ./...
+vet dir=invocation_directory():
+    cd {{dir}} && go vet ./...
