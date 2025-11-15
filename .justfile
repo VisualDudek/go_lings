@@ -1,15 +1,18 @@
+# Global variable for invocation directory
+invocation_dir := invocation_directory()
+
 # List all available commands
 default:
     @just --list
 
 # Run the application
-run dir=invocation_directory():
-    cd {{dir}} && go run ./
+run:
+    cd {{invocation_dir}} && go run ./
 
 # Format code
-fmt dir=invocation_directory():
-    cd {{dir}} && go fmt ./...
+fmt:
+    cd {{invocation_dir}} && go fmt ./...
 
 # Run go vet
-vet dir=invocation_directory():
-    cd {{dir}} && go vet ./...
+vet:
+    cd {{invocation_dir}} && go vet ./...
