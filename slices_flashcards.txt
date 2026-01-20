@@ -1,0 +1,163 @@
+#separator:Pipe
+#html:true
+#tags:Go Slices
+
+What is the slice header structure in Go and what three components does it contain?|A slice header contains: 1) pointer to the underlying array, 2) length (number of elements), and 3) capacity (total space allocated). The slice header is a small struct that points to contiguous memory.
+
+In Go, when you pass a slice to a function and append to it, why doesn't the original slice get modified?|Because slices are passed by value. The slice header (pointer, length, capacity) is copied, not shared. If append() reallocates the underlying array, the original slice's pointer is not updated.
+
+What is the difference between `len(s)` and `cap(s)` for a slice?|`len(s)` is the number of elements currently in the slice. `cap(s)` is the total capacity of the underlying array. You can have a slice of length 3 with capacity 10; only the first 3 elements are "in use."
+
+What happens when you append to a slice that is at capacity?|Go allocates a new, larger underlying array (typically doubling the capacity for small slices), copies existing elements, and updates the slice's pointer. The old array is eligible for garbage collection.
+
+How can you pre-allocate a slice with a specific length and capacity?|Use the `make()` function: `make([]T, length, capacity)`. For example: `s := make([]int, 5, 10)` creates a slice of length 5 with capacity 10.
+
+What is the result of `{{c1::append(s, slice...)}}` when `s` is a slice of integers and you want to append another slice?|The triple-dot operator `...` unpacks the second slice into individual elements so they can be appended to the first slice. Without it, you would append the slice itself as a single element.
+
+Explain what happens with this code: `s := []int{1, 2, 3}; s2 := s; s2[0] = 99`. What is the value of `s[0]` after this?|`s[0]` is now 99. Both `s` and `s2` point to the same underlying array, so modifying one modifies the other. Slices are references to arrays, not independent copies.
+
+What is a "reslice" in Go and provide an example?|A reslice creates a new slice from an existing slice by specifying new bounds. Example: `s := []int{1, 2, 3, 4, 5}; s2 := s[1:3]` creates a slice `[2, 3]` sharing the same underlying array. Reslicing cannot increase capacity.
+
+If you have `s := []int{1, 2, 3, 4, 5}` and you do `s2 := s[1:3]`, what are the length and capacity of `s2`?|`s2` has length 2 (elements [2, 3]) but capacity 4 (remaining space from index 1 to the end of the original array: 2, 3, 4, 5).
+
+What is the result of {{c1::s[1:len(s)]}} for a slice `s`?|This creates a new slice from index 1 to the end of the slice, equivalent to `s[1:]`.
+
+When you reslice `s[i:j]`, what constraint must be satisfied?|`0 <= i <= j <= len(s)`. Attempting to use indices outside this range or with `i > j` causes a panic.
+
+Explain the "append to function parameter" gotcha with slices.|When you pass a slice to a function and append within that function, the original slice in the caller is not modified because the slice header is copied. To modify a slice passed to a function, you must return the modified slice or pass a pointer to the slice.
+
+What does this code print and why? `s := []int{1, 2, 3}; append(s, 4); fmt.Println(s)`|It prints `[1 2 3]` because `append()` returns the modified slice but the result is ignored. The `s` variable is never reassigned, so it remains unchanged.
+
+What is the nil slice and how does it differ from an empty slice?|A nil slice is declared as `var s []int` with no initialization; it has length 0 and capacity 0 and points to nothing. An empty slice is created with `s := []int{}` or `make([]int, 0)`; it also has length 0 but may have a non-nil pointer. For most purposes they behave identically.
+
+Can you append to a nil slice?|Yes. You can append to a nil slice, and Go will allocate an underlying array as needed. Example: `var s []int; s = append(s, 1)` results in `s == [1]`.
+
+What is the behavior of `range` when iterating over a slice? Does it create copies of elements?|`range` returns the index and a copy of the value. If you modify the value in the loop, the original slice is not modified. To modify elements, use indices: `for i := range s { s[i] = newValue }`.
+
+What does this code do? `s := []int{1, 2, 3, 4, 5}; s = s[:]`|It creates a reslice of the entire slice, effectively resetting length and capacity to the full underlying array. In this case, `s` is unchanged because it already spans the full array.
+
+When would you use `s = s[:]` on a slice?|Rarely, but it can be useful to restore a slice to its full capacity after previous reslicing narrowed it. For example, if `s` was resliced to `s = s[1:3]`, then `s = s[:]` would expand it back (but only to the original boundaries, not beyond capacity).
+
+What is the difference between `[]int{1, 2, 3}` (slice literal) and `[3]int{1, 2, 3}` (array literal)?|The slice literal creates a slice with an underlying array. The array literal creates a fixed-size array of exactly 3 elements. Arrays have fixed length; slices are dynamic. Slices have len() and cap(); arrays only have len().
+
+If you modify an element via a slice, does it affect the underlying array?|Yes. Slices are views into arrays. Modifying a slice element modifies the underlying array, and this affects all other slices that reference the same array.
+
+What does `copy(dst, src)` do in Go?|`copy()` copies elements from the source slice into the destination slice. It returns the number of elements copied (the minimum of len(dst) and len(src)). The underlying arrays must be separate; `copy()` does not update lengths or capacities.
+
+How many elements does `copy(dst, src)` actually copy?|The minimum of `len(dst)` and `len(src)`. If `dst` has capacity 3 and `src` has 5 elements, only 3 are copied into `dst`. The length of `dst` does not change; only existing positions are overwritten.
+
+What is the memory efficiency concern when repeatedly appending to a slice in a loop without pre-allocation?|Each time capacity is exceeded, Go allocates a new array (roughly doubling it), copies all elements, and discards the old array. This causes repeated allocations and copying. Pre-allocating with `make()` avoids this overhead.
+
+Write a snippet that efficiently pre-allocates a slice to hold 1000 integers before appending in a loop.|`s := make([]int, 0, 1000); for i := 0; i < 1000; i++ { s = append(s, i) }` This allocates capacity once, so append operations in the loop don't trigger reallocations.
+
+What is the address of a slice header vs. the address of the underlying array?|The slice header has its own address in memory (where the header struct lives). The underlying array has a different address (the data it points to). Printing `&s` gives the header's address; the pointer field in the header is the array's address.
+
+Explain overlapping slices: what does this code do? `s := []int{1, 2, 3, 4, 5}; s1 := s[1:3]; s2 := s[2:5]; s1[0] = 99`|Both `s1` and `s2` reference the same underlying array. `s1[0]` refers to index 1 of the original array (value 2). Setting it to 99 also affects `s2` because `s2[0]` (index 2 of the original) is adjacent. This can lead to unexpected mutations.
+
+What does `clear(s)` do in Go 1.21+?|`clear(s)` sets all elements in the slice to their zero value (0 for integers, empty string for strings, nil for pointers, etc.). It does NOT change the length or capacity; only the values are zeroed.
+
+If you have `s := make([]int, 5)` and you do `clear(s)`, what is the state of `s` afterward?|`s` still has length 5 and the same capacity. All elements are now 0 (the zero value for int). `len(s)` and `cap(s)` are unchanged.
+
+What is a slice of slices (2D slice) and how do you create one?|A slice of slices is `[][]T`. For example, `[][]int`. You can create it with literals like `[][]int{{1, 2}, {3, 4}}` or use `make()`: `make([][]int, rows)` then initialize each inner slice.
+
+Why might a 2D slice created with `make([][]int, 3)` be problematic?|`make([][]int, 3)` creates 3 nil slices. You must explicitly initialize each inner slice, or you'll get panic when trying to append. Use `make([][]int, 3, 3)` or explicitly allocate: `s[0] = make([]int, 0, capacity)`.
+
+What does the blank identifier `_` do when used in a slice assignment like `_ = s`?|It discards the value. This is often used to suppress "unused variable" compiler errors when you want to test code without using all results. In production, this should be rare.
+
+Explain what happens in this code: `var s []int; fmt.Println(s == nil)` vs. `s := []int{}; fmt.Println(s == nil)`|The first prints `true` (nil slice). The second prints `false` (empty slice with a non-nil pointer). Use `len(s) == 0` or `s == nil` depending on whether you care about nil vs. empty distinction.
+
+When appending to a slice in a loop, why does the underlying array address sometimes change?|When capacity is exceeded, `append()` allocates a new larger array, copies elements to it, and returns a slice pointing to the new array. The old array address becomes stale. This is why you cannot safely append without reassigning: `s = append(s, value)`.
+
+What is a "slice header copy" and when does it happen?|Every time a slice is assigned or passed to a function, the slice header (3 words: pointer, length, capacity) is copied by value. The underlying array data is NOT copied. This means two slices can safely reference the same array.
+
+Can you compare two slices with `==` in Go?|No, the `==` operator does not work for slices (except checking for nil). You must use a loop or the `slices.Equal()` function from the standard library to compare slice contents.
+
+How do you safely modify a slice's contents within a function?|Use indices to modify in place: `func modify(s []int) { s[0] = 99 }`. This works because even though the slice header is copied, both slices reference the same underlying array. Do NOT rely on `append()` to modify the original unless you return the new slice.
+
+What does this print? `s := []int{1, 2, 3}; s2 := s; s = append(s, 4, 5); fmt.Println(s2)`|It prints `[1 2 3]` because `append()` reallocated `s` to a new array. `s2` still points to the original array. They are no longer aliased.
+
+Explain the difference between `s = append(s, values...)` and `copy(s, values)` in terms of length.|`append()` grows the slice and adds elements; length increases. `copy()` overwrites existing elements without changing length. `append()` is for growing; `copy()` is for replacing.
+
+What is the behavior of reslicing beyond the current length but within capacity? `s := make([]int, 3, 10); s = s[:5]`|This is valid and expands the slice's length from 3 to 5. The new elements (indices 3-4) exist in the capacity but are not initialized, so they contain garbage values (or more precisely, uninitialized memory).
+
+Can you shrink a slice in Go?|Slices can be resliced to a smaller length: `s = s[:newLength]`. However, capacity does NOT decrease. To truly reduce capacity, you must create a new slice and copy: `newSlice := make([]int, newLen); copy(newSlice, s)`.
+
+What does `s[i:i]` create?|An empty slice with length 0 but capacity equal to `cap(s) - i` (the remaining capacity from index `i` onward). It points to the same underlying array at position `i`.
+
+In Go, are strings mutable like slices?|No. Strings are immutable. You cannot modify individual characters. To modify a string, convert it to a slice of runes or bytes, modify the slice, and convert back to a string.
+
+What is the purpose of the `unsafe.SliceData()` function?|It returns a pointer to the underlying array data of a slice. This is unsafe and primarily useful for low-level operations or interfacing with C. For normal Go code, you should not need this.
+
+When would you use `unsafe.SliceData(s)`?|Only in low-level scenarios like interfacing with C libraries or performing unsafe memory operations. It should be avoided in normal Go code because it bypasses Go's safety guarantees.
+
+What does this code do and what is the risk? `p := unsafe.SliceData(s); p[0] = 99`|It gets a pointer to the underlying array and modifies the first element. The risk is that `p` becomes invalid if the slice is later resliced or the underlying array is reallocated, leading to undefined behavior.
+
+Explain the "unexpected slice reallocation" gotcha.|When you append to a resliced slice and exceed its capacity, Go allocates a new array. The resliced slice then points to a different array than its parent, breaking aliasing. Both slices now point to different underlying arrays.
+
+What is the impact of reslicing on append operations? `s := []int{1, 2, 3, 4, 5}; s = s[1:3]; s = append(s, 99)`|After reslicing to `[2, 3]`, `s` has length 2 and capacity 3 (from index 1 to 5 of the original). `append()` appends to index 3 of the original (value 4), which is overwritten to 99. The original array becomes `[1, 2, 3, 99, 5]`.
+
+If a slice is resliced to exclude the capacity beyond a certain point, can you still access that memory?|No. Once you reslice, you lose access to the excluded portion. For example, `s := []int{1, 2, 3, 4, 5}; s = s[1:3]` means you cannot directly access indices 3-4 via `s`. They exist in the original array but are outside `s`'s bounds.
+
+What is the difference between `make([]int, 0)` and `make([]int, 0, 10)`?|Both create empty slices (length 0), but the first has capacity 0 (will reallocate on first append), and the second has capacity 10 (can accommodate 10 appends without reallocation).
+
+When is `make([]int, len, cap)` useful?|When you know approximately how many elements you'll eventually have. Pre-allocating capacity avoids reallocations and improves performance, especially in loops or when building large slices incrementally.
+
+What is the default growth factor when a slice's capacity is exceeded?|For small slices (< 256 bytes), capacity roughly doubles. For larger slices, the growth factor is approximately 1.25x. The exact algorithm depends on Go's runtime implementation.
+
+Can you have a slice of function types in Go?|Yes. For example, `s := make([]func(int) int, 0)` is a valid slice of functions. You can append functions to it and invoke them: `result := s[0](42)`.
+
+How do you iterate over a slice with indices in the for loop?|Use `for i := range s` to get indices, or `for i, v := range s` to get both index and value. The blank identifier `_` can ignore the index or value: `for _, v := range s`.
+
+Can you modify the loop variable and expect it to affect the slice?|No. In `for _, v := range s`, `v` is a copy of the element. Modifying `v` does not affect the slice. Use indices instead: `for i := range s { s[i] = newValue }`.
+
+What does iterating over a nil slice do?|It behaves like iterating over an empty slice: the loop body never executes. No panic occurs.
+
+Explain the difference between `for i := 0; i < len(s); i++` vs. `for i := range s` in terms of semantics.|Both iterate over indices 0 to len(s)-1. The `range` version is more idiomatic Go and safe against concurrent length changes (though not guaranteed thread-safe). The C-style loop is more explicit.
+
+What is the behavior of `for i := range 10`?|This generates indices 0 through 9 (introduced in Go 1.22). It's a shorthand for `for i := 0; i < 10; i++`. If the second operand is a string or array/slice, it generates indices.
+
+When you sort a slice, does the underlying array's order change?|Yes. Sorting a slice via `slices.Sort(s)` or `sort.Slice(s, ...)` sorts the underlying array in place, which affects all slices referencing that array.
+
+How do you sort a slice of structs by a specific field?|Use `slices.SortFunc()` with a custom comparator. Example: `slices.SortFunc(s, func(a, b Person) int { return a.Age - b.Age })`. The comparator must return negative, zero, or positive.
+
+What is the panic message when you try to access a slice out of bounds?|`runtime error: index out of range` or `panic: runtime error: slice bounds out of range`. For example, `s := []int{1, 2}; _ = s[5]` panics.
+
+Can you recover from a slice index panic?|Yes, using `recover()` in a `defer()` block, though this is rarely recommended. It's better to check bounds: `if i < len(s) { _ = s[i] }`.
+
+What does `s = append(s[:0], items...)` do?|It clears the slice by reslicing to length 0, then appends new items. This reuses the underlying array (if it has capacity) instead of allocating new memory. It's a common pattern for "clearing and refilling" a slice.
+
+Explain when `append(s[:0], items...)` would NOT reuse the underlying array.|If the new items exceed the current capacity, `append()` must allocate a new array. For example, if `s` has capacity 10 but you append 15 items, a larger array is allocated.
+
+What is the purpose of the `...` operator in function calls with slices?|The `...` operator unpacks a slice into individual arguments. For example, `append(s, []int{1, 2, 3}...)` unpacks the second slice into individual elements rather than appending the slice itself.
+
+Can you use `...` with types other than slices?|In Go 1.22+, you can use `for range` on integer types. The `...` unpacking works specifically with slices. For arrays, you must first convert to a slice: `append(s, arr[:]...)`.
+
+What is a "backing array" in the context of slices?|The backing array is the underlying contiguous memory that a slice references. Multiple slices can reference the same backing array. When you reslice, you get a different view of the same backing array.
+
+If two slices reference the same backing array, are they considered equal with `==`?|No. The `==` operator only works on nil slices. Use `slices.Equal()` to compare contents, or manually compare elements.
+
+What does this idiom do? `s = s[:len(s)+1]`|It appends one uninitialized element to the slice by increasing its length by 1 (assuming capacity allows). The new element contains the zero value (or garbage if previously allocated but not written to).
+
+Is it safe to do `s = s[:len(s)+1]` if `len(s) == cap(s)`?|No. This causes a panic: `runtime error: slice bounds out of range`. You must have spare capacity to expand the length.
+
+What is the idiomatic Go way to check if a slice is empty?|`len(s) == 0` is the standard check. Checking `s == nil` is also valid if you specifically want to distinguish a nil slice, but `len(s) == 0` works for both nil and empty slices.
+
+Explain the GC (garbage collection) implication of keeping a reference to a large underlying array via a small slice.|If you have a large array and keep a resliced reference to just one element, the entire backing array is kept in memory and cannot be garbage collected. This is a memory leak risk.
+
+How do you fix the "large array, small slice" GC issue?|Create a new slice and copy only the needed elements: `newSlice := make([]T, len(s)); copy(newSlice, s)`. This breaks the reference to the large array, allowing it to be GC'd.
+
+What does `make([]int, 5, 5)` vs. `make([]int, 5)` create?|Both create a slice of length 5 with capacity 5. They are equivalent. Explicitly specifying capacity when it equals length is redundant but valid.
+
+Can the capacity ever be less than the length?|No. `cap(s) >= len(s)` is always true. Attempting to create a slice with capacity less than length is invalid: `make([]int, 10, 5)` panics.
+
+What is the time complexity of appending a single element to a slice (amortized)?|O(1) amortized time. Most appends are O(1) because they write to existing capacity. When capacity is exceeded, reallocation is O(n), but this is amortized across many appends.
+
+What is the space complexity of a slice?|O(capacity) because the underlying array occupies memory proportional to capacity, not length. Unused capacity (beyond length) still consumes memory.
+
+Explain when you would choose a slice over an array in Go.|Always use slices in Go (unless you have a fixed-size requirement). Slices are more flexible, can grow, and are idiomatic. Arrays are used only when size is known and fixed at compile-time.
+
+Can a slice type be used as a map key?|No. Slices cannot be used as map keys because they are not comparable. Arrays CAN be map keys. To use slice data as a key, convert to a string or use a custom type.
+
+How do you append one slice to another?|Use `s1 = append(s1, s2...)` to append `s2` to `s1`. The `...` unpacks `s2` into individual elements.
+
+What is the difference between `append(s, x)` and `append(s, x, y, z)`?|Both append elements, but the latter appends three elements in one operation. Both have the same underlying behavior but `append(s, x, y, z)` is more concise.
