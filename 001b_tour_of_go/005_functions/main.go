@@ -1,4 +1,4 @@
-// TODO: Does Go support variadic functions?
+// TAKE: Does Go support variadic functions?
 package main
 
 import "fmt"
