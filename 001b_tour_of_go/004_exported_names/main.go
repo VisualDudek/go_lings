@@ -1,4 +1,4 @@
-// TODO: Peek where math.Pi lives in the math package
+// TAKE: Peek where math.Pi lives in the math package
 // Ctrl+Shift+F10 to peek
 package main
 
