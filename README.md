@@ -1,6 +1,8 @@
 # go_lings
 My Go learning exercises. Inspired by ZigLings
 
+Check [ Claude go learning project ](./go-learning-project/README.md) for more structured Go learning path.
+
 ## Q
 - How to ignore staticcheck in VS Code and `go vet`? Is it even possible?
 - What is `./...` pattern in Go?
