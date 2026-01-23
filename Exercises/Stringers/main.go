@@ -7,7 +7,7 @@ import "fmt"
 
 type IPAddr [4]byte
 
-// TODO: Add a "String() string" method to IPAddr.
+// TAKE: Add a "String() string" method to IPAddr.
 
 func main() {
 	hosts := map[string]IPAddr{
