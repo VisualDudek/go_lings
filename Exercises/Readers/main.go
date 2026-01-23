@@ -6,7 +6,7 @@ package main
 
 type MyReader struct{}
 
-// TODO: Add a Read([]byte) (int, error) method to MyReader.
+// TAKE: Add a Read([]byte) (int, error) method to MyReader.
 
 func (MyReader) Read(b []byte) (int, error) { // ok ale można lepie
 	b[0] = 'A'
