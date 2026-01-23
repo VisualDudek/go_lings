@@ -1,3 +1,7 @@
 {
-    "explorer.sortOrderReverse": false
+    "explorer.sortOrderReverse": false,
+    "chat.tools.terminal.autoApprove": {
+        "git add": true,
+        "git commit": true
+    }
 }
