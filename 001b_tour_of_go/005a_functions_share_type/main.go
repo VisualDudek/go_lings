@@ -2,7 +2,7 @@ package main
 
 import "fmt"
 
-// In Go, functions can share parameter types.
+// TAKE: In Go, functions can share parameter types.
 // x int, b int is equivalent to:
 // x, b int
 func add(a, b int) int {
