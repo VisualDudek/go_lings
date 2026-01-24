@@ -1,0 +1,37 @@
+#separator:Pipe
+#html:true
+#tags:Go Fundamentals Tour
+#notetype:Basic
+#deck:Go Fundamentals
+
+What is the entry point function in every Go executable?|The `func main()` function in the `main` package
+What two elements must every executable Go program contain?|1. A package main declaration<br>2. A func main() function
+How do you import a single package in Go?|`import "package_name"` or import in a block with multiple packages
+What is the difference between a single import and factored imports?|Single: `import "fmt"` on one line<br>Factored: Multiple imports in () block:<br>`import (<br>"fmt"<br>"math"<br>)`
+In Go, what determines if a name is exported from a package?|Whether it starts with a capital letter (exported) or lowercase (unexported)
+What will happen if you try to access `math.pi` instead of `math.Pi`?|Compilation error - Go is case-sensitive and only capitalized names are exported from packages
+How do you call an exported function from an imported package?|Use dot notation: `PackageName.ExportedFunction()`<br>Example: `math.Sqrt(16)`
+What is the syntax for a Go function that takes two parameters?|`func functionName(param1 type, param2 type) returnType { }`
+How can you shorten parameter type declarations when consecutive parameters share the same type?|Instead of `func add(a int, b int)`, write `func add(a, b int)`
+What is the syntax for a Go function that returns multiple values?|List return types in parentheses: `func swap(x, y string) (string, string) { return y, x }`
+How do you capture multiple return values from a function call?|Use the short declaration with comma separation:<br>`a, b := functionReturningTwo()`
+What is a naked return in Go?|A return statement without values in a function with named return values<br>Example: `func split(sum int) (x, y int) { x = 5; y = 3; return }`
+What is the benefit of named return values in Go?|They serve as documentation and can be returned without explicitly listing them (naked return)
+What is the zero value in Go?|The default value given to variables when declared without initialization<br>Examples: 0 for int, false for bool, empty string "" for string
+Write code that declares an integer variable without initialization and prints its value|`var i int`<br>`fmt.Println(i)` // prints 0
+How do you declare multiple variables with initial values in Go?|`var a, b int = 1, 2`<br>or `var name type = value, name2 type = value2`
+Can you use the short variable declaration `:=` outside of a function?|No, `:=` can only be used inside functions. Use `var` at package level.
+What does `:=` do in Go and when can it be used?|It declares and initializes a variable with inferred type. It can only be used inside functions.
+What is the syntax for declaring variables with inferred types in a factored block?|`var (`<br>&nbsp;&nbsp;&nbsp;&nbsp;`ToBe bool = false`<br>&nbsp;&nbsp;&nbsp;&nbsp;`MaxInt uint64 = 1<<64 - 1`<br>`)`
+What are the basic numeric types in Go?|int, int8, int16, int32, int64, uint, uint8, uint16, uint32, uint64, uintptr, float32, float64, complex64, complex128
+How do you create a complex number in Go?|Use imaginary notation: `z := 1 + 2i` or use `cmplx` package functions
+What does `fmt.Printf("Type: %T Value: %v\n", value)` print?|Both the type (%T) and value (%v) of a variable
+What is the package structure required for a Go program to be executable?|`package main` declaration at the top of the file with a `func main()` entry point
+What happens if you try to use `import "math/rand"` and then call `math.Intn()`?|Compilation error - you must use `rand.Intn()` because the package name is `rand`, not `math`
+In the context of Go packages, what does "nested package path" mean?|A subpackage accessed via a path like "math/rand" where `math` is a collection and `rand` is the actual package
+Predict output: `var x, y int`<br>`fmt.Println(x, y)`|`0 0` (zero values for uninitialized int variables)
+Predict output: `var a, b, c = 1, "hello", true`<br>`fmt.Printf("%T %T %T\n", a, b, c)`|`int string bool` (types inferred from assignment)
+Predict output: `func swap(a, b int) (int, int) { return b, a }`<br>`x, y := swap(3, 5)`<br>`fmt.Println(x, y)`|`5 3`
+Write a function that returns two values and uses a naked return statement|`func split(n int) (x, y int) {`<br>&nbsp;&nbsp;&nbsp;&nbsp;`x = n / 2`<br>&nbsp;&nbsp;&nbsp;&nbsp;`y = n - x`<br>&nbsp;&nbsp;&nbsp;&nbsp;`return`<br>`}`
+What is the main difference between `var i int` (at package level) and `i := 5` in terms of scope and usage?|`var` declares at package level and gets zero value; `:=` declares at function level with inferred type from initialization
+Why would you use `var` blocks in Go instead of separate var declarations?|For better organization and readability when declaring multiple related variables at package level
