@@ -1,5 +1,6 @@
 // Package main demonstrates Go's constants.
 // Learn: Constants can be declared with const keyword; they are package-level or block-scoped with values fixed at compile time.
+// Constants cannot be declared using := syntax.
 package main
 
 import "fmt"
