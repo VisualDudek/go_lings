@@ -1,3 +1,6 @@
+// Package main demonstrates Go's basic types and factored variable declarations.
+// Learn: Grouping var declarations with block syntax, basic types (bool, uint64, complex128),
+// bit shift operators for numeric calculations, and type introspection with fmt.Printf.
 package main
 
 import (
