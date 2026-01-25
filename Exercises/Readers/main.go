@@ -8,7 +8,7 @@ type MyReader struct{}
 
 // TAKE: Add a Read([]byte) (int, error) method to MyReader.
 
-func (MyReader) Read(b []byte) (int, error) { // ok ale można lepie
+func (MyReader) _Read(b []byte) (int, error) { // ok ale można lepie
 	b[0] = 'A'
 	return 1, nil
 }

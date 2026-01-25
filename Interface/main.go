@@ -36,6 +36,7 @@ func main() {
 	a = &v
 	a.Add(1)
 
-	a = v // Fail bc Add has pointer receiver and you are trying to pass value
+	// --- The following line would cause a compile error ---
+	// a = v // Fail bc Add has pointer receiver and you are trying to pass value
 
 }
