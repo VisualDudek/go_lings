@@ -20,3 +20,6 @@ vet:
 # Run in the highest numbered subfolder (e.g., 014_type_inference)
 run-latest:
     cd {{invocation_dir}} && cd $(ls -1 | grep '^[0-9][0-9][0-9]_' | sort -rV | head -1) && go run ./
+
+tour:
+    ~/go/bin/tour
