@@ -9,7 +9,16 @@ Check [ Claude go learning project ](./go-learning-project/README.md) for more s
     - `...` is a wildcard pattern in Go package matching syntax
 - does go have formatter? How to setup max. line length?
     - `gofmt` is the standard code formatter for Go. It does not have a max line length setting.
-    - try `golangci-lint` with `lll` (line length limit) linter enabled. Integrate with VS Code using `golangci-lint` extension.
+    - try `golangci-lint` with `lll` (line length limit) linter enabled. [ Golangci-lint ](https://golangci-lint.run/)
+- What is `go.mod` file?
+- Can set Go version with `go.mod` file?
+    - Yes, you can specify the Go version in the `go.mod` file using the `go` directive.
+- Underlying type for `time.Weekday`?
+    - The underlying type for `time.Weekday` is `int`.
+- What is diff between `fmt.Println` and `println()`?
+    - `fmt.Println` is a formatted output function from the `fmt` package, while `println()` is a built-in function in Go for simple printing. `fmt.Println` provides more formatting options and is generally preferred for production code.
+    - `fmt.Println` return number of bytes written and error, while `println()` does not return any value.
+    - `fmt.Println` support Interface types.
     
     
 
