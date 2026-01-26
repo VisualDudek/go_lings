@@ -7,6 +7,10 @@ Check [ Claude go learning project ](./go-learning-project/README.md) for more s
 - How to ignore staticcheck in VS Code and `go vet`? Is it even possible?
 - What is `./...` pattern in Go?
     - `...` is a wildcard pattern in Go package matching syntax
+- does go have formatter? How to setup max. line length?
+    - `gofmt` is the standard code formatter for Go. It does not have a max line length setting.
+    - try `golangci-lint` with `lll` (line length limit) linter enabled. Integrate with VS Code using `golangci-lint` extension.
+    
     
 
 ## SOP
