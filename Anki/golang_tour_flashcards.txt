@@ -35,3 +35,33 @@ Predict output: `func swap(a, b int) (int, int) { return b, a }`<br>`x, y := swa
 Write a function that returns two values and uses a naked return statement|`func split(n int) (x, y int) {`<br>&nbsp;&nbsp;&nbsp;&nbsp;`x = n / 2`<br>&nbsp;&nbsp;&nbsp;&nbsp;`y = n - x`<br>&nbsp;&nbsp;&nbsp;&nbsp;`return`<br>`}`
 What is the main difference between `var i int` (at package level) and `i := 5` in terms of scope and usage?|`var` declares at package level and gets zero value; `:=` declares at function level with inferred type from initialization
 Why would you use `var` blocks in Go instead of separate var declarations?|For better organization and readability when declaring multiple related variables at package level
+What is the syntax for explicit type conversion in Go?|`T(v)` where T is the target type and v is the value<br>Example: `float64(3)` or `uint(f)`
+Why does Go require explicit type conversion between types?|To prevent implicit coercion bugs and make type changes visible and intentional in code
+What happens if you try to assign a float value to an int variable without conversion in Go?|Compilation error - Go does not allow implicit type conversion
+Predict output: `var x int = 3`<br>`var f float64 = float64(x)`<br>`fmt.Println(f)`|`3` (the int is converted to float64, which prints as 3)
+What is the difference between variables declared with `var` and constants declared with `const`?|Variables can change at runtime; constants have values fixed at compile time and cannot be modified
+Can you use the short declaration operator `:=` to declare constants in Go?|No, constants must be declared with `const` keyword; `:=` cannot be used for constants
+What is the scope of a constant in Go?|Constants can be package-level (accessible throughout the package) or block-scoped (inside a function)
+Predict output: `const Pi = 3.14`<br>`func main() {`<br>&nbsp;&nbsp;&nbsp;&nbsp;`const Greeting = "Hi"`<br>&nbsp;&nbsp;&nbsp;&nbsp;`fmt.Println(Pi, Greeting)`<br>`}`|`3.14 Hi` (both package-level and function-level constants are accessible)
+What are "untyped constants" in Go?|Constants without explicit type annotations that can hold very large values and adapt to the context in which they are used
+Why can untyped constants hold very large values like 1<<100 without overflow?|Because they exist at compile time with arbitrary precision and only take on a concrete type when assigned to a variable or used in a context requiring a specific type
+Predict output: `const Big = 1 << 100`<br>`fmt.Println(Big)`|Compilation error - Big has no concrete type and cannot be printed without explicit conversion or assignment to a typed variable
+What is `iota` in Go and what does it do?|`iota` is a built-in constant that starts at 0 and increments by 1 for each const declaration in a const block
+How do you create enumeration values in Go using `iota`?|Use `iota` in a const block where each constant automatically increments:<br>`const (`<br>&nbsp;&nbsp;&nbsp;&nbsp;`Red = iota   // 0`<br>&nbsp;&nbsp;&nbsp;&nbsp;`Green        // 1`<br>&nbsp;&nbsp;&nbsp;&nbsp;`Blue         // 2`<br>`)`
+Can you use expressions with `iota` in Go?|Yes, you can perform arithmetic on iota:<br>`const (`<br>&nbsp;&nbsp;&nbsp;&nbsp;`StatusOK = iota + 200 // 200`<br>&nbsp;&nbsp;&nbsp;&nbsp;`StatusCreated          // 201`<br>`)`
+What is a bit shift operator in Go and what does `1 << 8` mean?|`<<` is the left bit shift operator; `1 << 8` shifts 1 left by 8 bits, resulting in 256 (2^8)
+What does `1 << 16 - 1` equal and what does it represent?|65535, which is the maximum value for a uint16 (2^16 - 1)
+What is the purpose of bit flags in Go?|To represent multiple boolean states using a single integer, where each bit represents a different flag
+Predict output: `const (`<br>&nbsp;&nbsp;&nbsp;&nbsp;`READ = 1 << iota   // ?`<br>&nbsp;&nbsp;&nbsp;&nbsp;`WRITE              // ?`<br>&nbsp;&nbsp;&nbsp;&nbsp;`EXECUTE            // ?`<br>`)`|READ = 1 (0b001), WRITE = 2 (0b010), EXECUTE = 4 (0b100)
+How do you check if a bit flag is set in a Go variable?|Use the bitwise AND operator `&`:<br>`if userPerms&READ != 0 { /* can read */ }`
+How do you combine multiple bit flags in Go?|Use the bitwise OR operator `|`:<br>`userPerms := READ | EXECUTE`
+What is the syntax for complex number literals in Go?|Use the form `real + imagi` (e.g., `0.8 + 0.5i`, `3 + 4i`)
+What package should you import to work with complex numbers in Go?|The `math/cmplx` package provides functions like `cmplx.Sqrt()` for complex arithmetic
+When Go infers the type of a numeric constant like `3.14`, what type does it become?|`float64`
+When Go infers the type of a numeric constant like `42`, what type does it become?|`int`
+When Go infers the type of a numeric constant like `0.8 + 0.5i`, what type does it become?|`complex128`
+What is the key advantage of untyped constants maintaining full precision?|You can perform arithmetic on very large numbers at compile time without loss of precision, and the result adapts to the target type when assigned
+Predict output: `const HighPrecision = 1e20`<br>`const LowPrecision = HighPrecision / 1e10`<br>`fmt.Println(LowPrecision)`|`1e+10` (the division is computed with full precision at compile time)
+In Go, if you have `const x = 42` and later use `f := float64(x)`, what happens?|The constant 42 (which is untyped) is implicitly converted to float64 at the assignment; this is allowed because untyped constants adapt to context
+Why does Go allow implicit conversion of untyped constants but not variables?|Untyped constants are compile-time values with arbitrary precision, so the conversion is safe and verified at compile time; variables require explicit conversion to prevent runtime errors
+Can you mix typed and untyped constants in arithmetic in Go?|Yes, untyped constants will take on the type of the typed operand in the expression, limited by that type's range
