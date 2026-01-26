@@ -19,6 +19,8 @@ Check [ Claude go learning project ](./go-learning-project/README.md) for more s
     - `fmt.Println` is a formatted output function from the `fmt` package, while `println()` is a built-in function in Go for simple printing. `fmt.Println` provides more formatting options and is generally preferred for production code.
     - `fmt.Println` return number of bytes written and error, while `println()` does not return any value.
     - `fmt.Println` support Interface types.
+- `var f func(func(int,int) int, int) int` - what is this declaration?
+    - This declaration defines a variable `f` that is a function. This function takes two parameters: the first parameter is itself a function that takes two `int` arguments and returns an `int`, and the second parameter is an `int`. The outer function returns an `int`.
     
     
 
