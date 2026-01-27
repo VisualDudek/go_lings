@@ -45,6 +45,9 @@ for _, v := range slice {
 }
 ```
 - Function Literals
+
+### Boot.dev ideas
+- Embedded Structs
     
     
 
