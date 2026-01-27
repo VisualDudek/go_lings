@@ -27,6 +27,18 @@ Check [ Claude go learning project ](./go-learning-project/README.md) for more s
 - `fmt.Sprint` very interesting: "Spaces are added between operands when neither is a string." (docs)
 - Anonymous Functions
 - Closures return function, so you need first call outer function to get inner function, then call inner function.
+- Why do I need nil slices ?
+- I need `make()` for Pre-allocating memory for slices, without it I need to append to nil slice which cause multiple allocations -> wasteful bc. of copying data to new memory locations multiple times.
+- `range` over int., one value is returned, iterate over slice, two values are returned (index, value). You can skip second var with `_` or omit it.
+- before using `map` need to initialize it with `make()`, otherwise it is nil and will cause runtime panic on write.
+- curly braces `{ }` for literals.
+- mind bending, using short var declaration `:=` inside 'for' block loop
+```go
+for _, v := range slice {
+    _, ok := myMap[v] // mind bending
+}
+```
+- Function Literals
     
     
 
