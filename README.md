@@ -3,6 +3,11 @@ My Go learning exercises. Inspired by ZigLings
 
 Check [ Claude go learning project ](./go-learning-project/README.md) for more structured Go learning path.
 
+## Anki
+Flashcards from various Go learning resources. See md files in [Anki](./Anki) directory.
+- [Go Fundamentals - Flashcards](./Anki/golang_tour_flashcards.md)
+- [Go Tour More Types - Flashcards](./Anki/001c_tour_more_types_flashcards.md)
+
 ## Q
 - How to ignore staticcheck in VS Code and `go vet`? Is it even possible?
 - What is `./...` pattern in Go?
