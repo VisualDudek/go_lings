@@ -21,6 +21,12 @@ Check [ Claude go learning project ](./go-learning-project/README.md) for more s
     - `fmt.Println` support Interface types.
 - `var f func(func(int,int) int, int) int` - what is this declaration?
     - This declaration defines a variable `f` that is a function. This function takes two parameters: the first parameter is itself a function that takes two `int` arguments and returns an `int`, and the second parameter is an `int`. The outer function returns an `int`.
+- can I use "named return" in func. signature with multiple return values?
+    - use "naked return" only for small functions, otherwise it reduces code readability.
+- What is "guard clauses"?
+- `fmt.Sprint` very interesting: "Spaces are added between operands when neither is a string." (docs)
+- Anonymous Functions
+- Closures return function, so you need first call outer function to get inner function, then call inner function.
     
     
 
