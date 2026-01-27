@@ -28,6 +28,7 @@ func main() {
 	}
 }
 
+// TAKE: Fibonacci closure
 // EXAMPLE Fibonacci closure
 
 func fibonacci() func() int {
