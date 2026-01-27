@@ -1,0 +1,69 @@
+# Go Tour More Types - Flashcards
+
+| Question | Answer |
+|----------|--------|
+| In Go, how do you declare a pointer to an int? | `var p *int` |
+| What does the `&` operator do in Go? | Takes the address of a variable; creates a pointer to it |
+| What does the `*` operator do when applied to a pointer? | Dereferences the pointer; accesses the value it points to |
+| Can you modify a variable through a pointer? Write code that sets `i` to 21 through pointer `p`. | `p := &i; *p = 21` |
+| What is the relationship between a pointer and the variable it points to? Will modifying through the pointer affect the original? | Yes; `*p = value` modifies the original variable. The pointer and variable reference the same memory location. |
+| True or False: `var p *int` initializes the pointer. What is the zero value? | False; the zero value is `nil`. The pointer must be assigned before dereferencing. |
+| How do you define a struct type in Go? | `type StructName struct {`<br/>`Field1 TypeA`<br/>`Field2 TypeB`<br/>`}` |
+| How do you create a struct instance with positional values? | `v := Vertex{1, 2}` — values in field order |
+| How do you create a struct instance using named fields? | `v := Vertex{X: 1, Y: 2}` or mix: `Vertex{X: 1}` (Y defaults to zero) |
+| When you create a struct with `Vertex{}`, what happens to the fields? | All fields are initialized to their zero values (0 for int, empty string for string, false for bool, etc.) |
+| Can you take a pointer to a struct literal? | Yes: `p := &Vertex{1, 2}` — p has type `*Vertex` |
+| How do you access and modify struct fields through a pointer in Go? Example: `p.X = 10` | Go automatically dereferences; just use `p.X = 10`. Equivalent to `(*p).X = 10` but Go handles it. |
+| Declare an array of 2 strings with no initialization. | `var a [2]string` |
+| What makes arrays different from slices in Go? | Arrays have a **fixed length** that is **part of the type**. `[2]int` and `[3]int` are different types. Slices are dynamic. |
+| Declare and initialize an array of 6 ints with values [2, 3, 5, 7, 11, 13] | `primes := [6]int{2, 3, 5, 7, 11, 13}` or `arr := [...]int{2, 3, 5, 7, 11, 13}` |
+| Declare a slice of ints with no length specified. | `var s []int` or `s := []int{}` |
+| How do you slice an array or slice? Give the syntax for slicing `arr[1:4]`. | `arr[1:4]` returns elements from index 1 up to (but not including) index 4. Both bounds are optional: `arr[:4]`, `arr[1:]`, `arr[:]` |
+| What are the default values for slice bounds? - Low: | 0 (start of the slice/array) |
+| What are the default values for slice bounds? - High: | len(s) (end of the slice/array) |
+| When you slice an array to create a slice, what is the relationship? | The slice references the underlying array. Modifying slice elements modifies the array. |
+| Two slices from the same array share the same underlying data. Will modifying one slice's element affect the other? | Yes, if the slices overlap. Both see the modified value in the underlying array. |
+| What does `len(s)` return for a slice? | The number of elements currently in the slice |
+| What does `cap(s)` return for a slice? | The capacity: the number of elements the slice can hold before allocating a new underlying array |
+| When you reslice with `s[2:]`, what happens to capacity? | The capacity decreases starting from the new starting index. `cap(s[2:])` = `cap(s) - 2` |
+| When you reslice with `s[:n]`, what happens to capacity? | Capacity stays the same (still measured from the original start of the underlying array). Only length changes. |
+| What does `make([]int, 5)` do? | Creates a slice of length 5, capacity 5, with all elements initialized to 0 (zero value) |
+| What does `make([]int, 0, 5)` do? | Creates a slice of length 0, capacity 5 (pre-allocated but empty). Useful for append operations. |
+| Write code that creates a slice of length 3, capacity 5. | `s := make([]int, 3, 5)` |
+| What does `append(s, 1, 2, 3)` return? | The updated slice. If it fits in capacity, a new slice from the same array. If capacity is exceeded, a new array is allocated. |
+| What is the signature of `append`? | `func append(s []T, vs ...T) []T` — variadic function that returns a new/updated slice |
+| When you call `s = append(s, val)`, why must you assign the result back? | The slice header (pointer, length, capacity) may change if the underlying array is reallocated. You must capture the new slice reference. |
+| The `append` function works on nil slices. What happens when you `append` to a `nil` slice? | A new underlying array is allocated and the slice points to it. Works fine; nil is treated as an empty slice. |
+| Write a for loop that iterates over index and value in a slice `s`. | `for i, v := range s { ... }` |
+| Write a for loop that iterates only over indices in a slice `s`. | `for i := range s { ... }` |
+| Write a for loop that iterates only over values in a slice `s`, ignoring the index. | `for _, v := range s { ... }` |
+| What does the blank identifier `_` do in a range loop? | Ignores that value. Common for ignoring the index when you only care about values. |
+| In a slice literal with a struct type, like `[]struct{i int; b bool}{{2, true}}`, what does `[]` mean? | `[]` indicates a slice type. The type that follows is the element type (in this case, an anonymous struct). |
+| Can the element type of a slice be a struct type? | Yes; `[]MyStruct` is a valid slice type. You can even use anonymous structs: `[]struct{X int}` |
+| Declare a map from string to int. | `var m map[string]int` |
+| What is the zero value of a map? | `nil` — the map does not point to any hash table and cannot be used for key-value operations. |
+| Before using a map, what must you do if it's declared as `var m map[string]int`? | Initialize it with `make`: `m = make(map[string]int)` |
+| Add a key-value pair to a map: key="hello", value=42 | `m["hello"] = 42` |
+| Read a value from a map with key "hello" | `v := m["hello"]` |
+| What happens if you read a key that doesn't exist in the map? | The zero value of the value type is returned (0 for int, "" for string, etc.) |
+| How do you delete a key from a map? | `delete(m, key)` |
+| Write code to read a value and check if the key exists using the comma-OK idiom. | `v, ok := m["key"]; if ok { ... }` |
+| What does `ok` represent in `v, ok := m["key"]`? | A boolean: `true` if the key exists, `false` if it doesn't. Even if key doesn't exist, `v` gets the zero value. |
+| Can you distinguish between a missing key and a key with a zero value? | Yes, use comma-OK: `v, ok := m["key"]`. Only `ok` tells you if the key exists. |
+| Write a map literal with string keys and Point values (struct with X, Y) where you explicitly write the type in elements. | `map[string]Point{`<br/>`"origin": Point{X: 0, Y: 0},`<br/>`}` |
+| When the top-level type is known, you can omit the element type. Write the same map but omit the redundant `Point`. | `map[string]Point{`<br/>`"origin": {X: 0, Y: 0},`<br/>`}` |
+| In Go, are functions first-class values? | Yes; you can assign functions to variables, pass them as arguments, and return them. |
+| Write a function type that takes two floats and returns a float. | `func(float64, float64) float64` |
+| Write code that assigns an anonymous function to a variable `f`. | `f := func(x int) int { return x * 2 }` |
+| Can you pass a function as an argument? Write a function that takes a function `fn` and an int, and calls `fn(3)`. | `func apply(fn func(int) int) int { return fn(3) }` |
+| What is a closure in Go? | A function that references variables from its enclosing scope. Those variables are captured and persist across multiple calls. |
+| Write a function that returns a function that increments and returns a counter. | `func counter() func() int {`<br/>`count := 0`<br/>`return func() int {`<br/>`count++`<br/>`return count`<br/>`}`<br/>`}` |
+| In the closure above, does each call to `counter()` get its own captured `count`? | Yes. Each invocation of `counter()` creates a new `count` variable. Multiple closures **do not** share the same `count`. |
+| Write a Fibonacci closure that returns successive Fibonacci numbers. | `func fibonacci() func() int {`<br/>`a, b := 0, 1`<br/>`return func() int {`<br/>`result := a`<br/>`a, b = b, a+b`<br/>`return result`<br/>`}`<br/>`}` |
+| In Go, the bitshift operator `<<` requires the right operand to be which type? | `uint` (unsigned integer). You must type-cast if using a signed int: `1 << uint(i)` |
+| Write code that computes 2^i using bit shifts, where i is an int loop variable. | `result := 1 << uint(i)` |
+| Why does `1 << i` fail if `i` is an `int`, but `1 << uint(i)` works? | Go's type system requires the shift count to be unsigned. Signed integers must be explicitly cast to `uint`. |
+| You have a slice `s` and you want to iterate over it writing both the powerset indices and values. What is the range syntax? | `for i, v := range s { println(i, v) }` |
+| Write code that creates a 2D slice (slice of slices) manually and accesses element [1][2]. | `board := [][]string{{"a", "b"}, {"c", "d"}}; board[1][2] = "x"` |
+| Given a map `data := make(map[string][]int)`, how would you append the value 42 to the slice at key "key"? | `data["key"] = append(data["key"], 42)` — works even if key doesn't exist (nil slice initial value). |
+| Write a function that takes a map of strings to ints, returns the value for a given key, and handles the case where the key doesn't exist gracefully. | `func getValue(m map[string]int, key string) int {`<br/>`v, ok := m[key]`<br/>`if !ok {`<br/>`return 0 // or some default`<br/>`}`<br/>`return v`<br/>`}` |
