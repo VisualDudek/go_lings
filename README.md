@@ -8,6 +8,9 @@ Flashcards from various Go learning resources. See md files in [Anki](./Anki) di
 - [Go Fundamentals - Flashcards](./Anki/golang_tour_flashcards.md)
 - [Go Tour More Types - Flashcards](./Anki/001c_tour_more_types_flashcards.md)
 
+## Pitfalls
+- [Go Struct Pitfalls (Bug-Oriented)](./go-learning-project/03-data-structures/PITFALLS.md)
+
 ## Q
 - How to ignore staticcheck in VS Code and `go vet`? Is it even possible?
 - What is `./...` pattern in Go?
