@@ -58,6 +58,10 @@ fmt.Printf("Struct is %d bytes\n", typ.Size())
 ```
 - What is `unsafe` package?
 - Empty struct
+- sugar syntax logic: you can call method with pointer receiver on value type, Go will take address automatically.
+- interface variable
+    - interface variable can hold any value that implements the interface
+    - the deal is that interface variable holds two things: the actual value and the type information about that value which is different from the value itself.
 
 ### Boot.dev ideas
 - Embedded Structs
