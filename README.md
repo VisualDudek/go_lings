@@ -50,10 +50,18 @@ for _, v := range slice {
 - Function Literals
 - You can declare a method on non-struct types, too. (!!!)
 - In Go you pass by value not by reference. This has consequences when passing by value structs that you expect to be modified inside the method you get copy of struct. **And that is why pointer receivers are used to modify the original struct.**
+- Check memory layout of struct with reflect package.
+```go
+typ := reflect.TypeOf(stats{})
+fmt.Printf("Struct is %d bytes\n", typ.Size())
+```
+- What is `unsafe` package?
+- Empty struct
 
 ### Boot.dev ideas
 - Embedded Structs
 - Anonymous Structs
+- memory layout of structs
     
     
 
@@ -74,6 +82,8 @@ XXX_topic_name/
 - [ Go specification ](https://go.dev/ref/spec)
 - [ wiki: Closure ](https://en.wikipedia.org/wiki/Closure_(computer_programming))
 - [ Effective Go ](https://go.dev/doc/effective_go)
+- [ go101 memory layout ](https://go101.org/article/memory-layout.html)
+- [ Go by example ](https://gobyexample.com/)
 
 ## Postmortem
 
