@@ -48,6 +48,8 @@ for _, v := range slice {
 }
 ```
 - Function Literals
+- You can declare a method on non-struct types, too. (!!!)
+- In Go you pass by value not by reference. This has consequences when passing by value structs that you expect to be modified inside the method you get copy of struct. **And that is why pointer receivers are used to modify the original struct.**
 
 ### Boot.dev ideas
 - Embedded Structs
