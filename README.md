@@ -1,7 +1,8 @@
 # go_lings
 My Go learning exercises. Inspired by ZigLings
 
-Check [ Claude go learning project ](./go-learning-project/README.md) for more structured Go learning path.
+- Check [ Claude go learning project ](./go-learning-project/README.md) for more structured Go learning path.
+- [ shortlist of Go libraries that are both widely used and excellent for learning practical Go skills](./GO_LIBS.md)
 
 ## Anki
 Flashcards from various Go learning resources. See md files in [Anki](./Anki) directory.
