@@ -51,6 +51,7 @@ for _, v := range slice {
 
 ### Boot.dev ideas
 - Embedded Structs
+- Anonymous Structs
     
     
 
@@ -63,6 +64,14 @@ XXX_topic_name/
 ```
 - `XXX`: 3-digit zero-padded number (001, 002, 003...)
 - `topic_name`: lowercase with underscores
+
+### reading materials
+- [ Go's Declaration Syntax ](https://go.dev/blog/declaration-syntax)
+- [ Go Slices: usage and internals ](https://go.dev/blog/slices-intro)
+- [ Composite literals in Go ](https://go.dev/ref/spec#Composite_literals)
+- [ Go specification ](https://go.dev/ref/spec)
+- [ wiki: Closure ](https://en.wikipedia.org/wiki/Closure_(computer_programming))
+- [ Effective Go ](https://go.dev/doc/effective_go)
 
 ## Postmortem
 
