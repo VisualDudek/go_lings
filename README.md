@@ -81,6 +81,28 @@ Read([]byte) (int, error) // Note that return value to not contain []byte
 - if a struct has a field that is `io.Reader`:
     - then the struct automatically implements the `io.Reader` interface. This is because the struct can delegate the `Read` method call to its embedded `io.Reader` field. (???)
     - you can use method `Read` on this field
+- Empty interface `interface{}` is always implemented by every type because it has no methods requirements.
+- Name your interfaces parameters:
+```go
+type Copier interface {
+    Copy(dst string, src string) (written int64, err error)
+}
+// is better than
+type Copier interface {
+    Copy(string, string) (n int64, err error)
+```
+- Keep interfaces small.
+- chain error checks with `if err != nil { return err }` this is brilliant design.
+```go
+func doSomething() (int, error) {
+    result, err := doAnotherThing()
+    if err != nil {
+        return 0, err
+    }
+    return result, nil
+}
+```
+- custom error with `fmt.Errorf("custom error: %v", int)` 
 
 ### Boot.dev ideas
 - Embedded Structs
