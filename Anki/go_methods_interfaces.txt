@@ -1,0 +1,67 @@
+#separator:Pipe
+#html:true
+#tags:Go Methods Interfaces
+#notetype:Basic
+#deck:Go Methods & Interfaces
+
+What is the syntax for defining a method in Go?|Use a receiver between `func` and method name: `func (receiverName ReceiverType) MethodName() ReturnType`
+How do you call a method on a value in Go?|Use dot notation: `value.MethodName()`
+Can you define methods on structs only?|No; you can define methods on any named type (that isn't imported from another package), including built-in types wrapped as custom types like `type MyFloat float64`
+What is the key difference between a method with value receiver vs pointer receiver?|Value receiver: operates on a copy; pointer receiver: can modify the original value and is more efficient for large structs
+When should you use a pointer receiver?|Use when the method needs to mutate the receiver, avoid copying large structs, or when consistency requires all methods to use pointers
+What happens if a method has a pointer receiver but you call it on a non-pointer value?|Go automatically takes the address; you can still call `value.Method()` on a value even if the receiver is a pointer
+When you pass a pointer to a function, what operator do you use to pass the address?|Use the `&` operator: `FunctionName(&value)`
+What is an interface in Go?|A set of method signatures that any type satisfying all methods implicitly implements without explicit declaration
+How do you check if a type implements an interface?|Go uses implicit satisfaction; if a type has all methods defined in the interface, it implements it automatically
+Why is implicit interface satisfaction useful?|You can define small, focused interfaces even after types exist; types don't need to declare intent; reduces coupling between packages
+What two pieces of information does an interface variable hold?|The concrete value and its type information (inspectable with %T format verb)
+What happens when you try to assign a value to an interface variable of wrong type?|It panics at runtime with an interface conversion error
+How can you safely check if an interface variable holds a specific type?|Use the "comma ok" idiom: `value, ok := interfaceVar.(ConcreteType)` where `ok` is a boolean
+What must you do if a method uses a pointer receiver to satisfy an interface?|You must assign a pointer to the interface: `var i Interface = &value` (not `&value` if receiver is `*T`)
+What is the empty interface?|`interface{}` with no methods; any type satisfies it; use when you need maximum flexibility but lose type safety
+In Go 1.18+, what is the type alias for empty interface?|`any` is equivalent to `interface{}`
+How does a type switch work in Go?|`switch v := i.(type) { case Type1: ... case Type2: ... }` matches the concrete type and v gets that type in each case
+What is the Stringer interface?|`interface { String() string }` defined in fmt package; types implementing String() get custom display behavior in fmt functions
+What is the error interface?|`interface { Error() string }` used for custom error types; implement Error() method to create your own error types
+Should you define Error() method with value or pointer receiver?|Pointer receiver is best practice; with value receiver the error can never be nil which can cause subtle bugs
+What does io.Reader interface require?|A single Read method: `Read(b []byte) (n int, err error)` that fills the byte slice and returns characters read and error
+How does io.Copy work?|It repeatedly calls Read on the source and writes to the destination until EOF is reached
+Why does strings.NewReader return a pointer instead of a value?|Because the Read() method uses a pointer receiver; also, pointers share state across uses, maintaining read position sequentially
+What is a nil interface variable?|An interface variable that hasn't been assigned any concrete value; calling a method on it panics
+What is the difference between nil interface and interface holding nil value?|Nil interface: contains nil value and nil type. Interface with nil value: contains a non-nil type but nil concrete value (still not nil itself)
+What format verb shows the concrete runtime type in an interface variable?|`%T` prints the concrete type, not the interface type
+Can you assign different concrete types to the same interface variable?|Yes; any type implementing the interface methods can be assigned to the same interface variable
+What syntax allows you to convert a built-in type like float64 to a custom type?|`type MyFloat float64` creates a named type alias; then you can define methods on `MyFloat`
+When implementing an interface, must you be aware of whether methods use value or pointer receivers?|Yes; if any method uses a pointer receiver, only the pointer version of that type implements the interface, not the value
+What happens if you define a method on a type from another package?|Go compilation error; you can only define methods on types defined in your own package
+How should you structure error types to carry context?|Embed additional context in struct fields: `type MyError struct { When time.Time; What string }` then implement Error() method
+What is the advantage of custom error types over plain strings?|You can store metadata, use type assertions to distinguish error types, and provide structured error information to callers
+How do you convert a value receiver that should be a pointer receiver?|Not directly; if you defined it wrong, redefine the method with pointer receiver: `func (p *Type) Method()` instead of `func (p Type) Method()`
+Write code that calls a method defined with a pointer receiver on a value: What does Go do?|Go automatically dereferences; `value.PointerMethod()` becomes `(&value).PointerMethod()` automatically
+What's the idiomatic way to wrap an io.Reader with transformation logic?|Create a custom struct holding the io.Reader, implement Read() with pointer receiver, and transform data before returning
+Given this code: `var i interface{} = "hello"; f := i.(float64);` what happens?|Panic at runtime: interface conversion error because the underlying type is string, not float64
+In a type switch, what does the `default` case do?|Handles types that don't match any explicit case; `v` is still the interface{} type in the default case
+Why can't the Error() method on an error type use a value receiver in some contexts?|With value receiver, calling Error() on a nil value still works (value is zero), breaking nil error checks; pointer receiver allows nil to be detectable
+Predict output: `type Point struct{X, Y float64}; func (p Point) Abs() float64 { return math.Sqrt(p.X*p.X + p.Y*p.Y) }; p := Point{3, 4}; fmt.Println(p.Abs())|5 (calculates distance: sqrt(9+16)=5)
+Predict output: `type Point struct{X, Y float64}; func (p *Point) Scale(f float64) { p.X *= f; p.Y *= f }; p := Point{3, 4}; p.Scale(2); fmt.Println(p.X)|6 (pointer receiver modifies original)
+Predict output: `type I interface{M()}; type T struct{}; func (t T) M(){println("T")}; var i I = T{}; i.M()|T (implicit interface satisfaction)
+Predict output: `type I interface{M()}; type T struct{}; func (t *T) M(){println("T")}; var i I = T{}; i.M()|Compile error: T does not implement I (method M has pointer receiver)
+Predict output: `var i interface{} = "hello"; s := i.(string); fmt.Println(s)|hello (successful type assertion)
+Predict output: `var i interface{} = "hello"; f := i.(float64)|Panic at runtime: interface conversion failed
+Predict outcome: `var i interface{} = "hello"; f, ok := i.(float64); fmt.Println(ok)|false (safe type assertion returns ok=false)
+Predict output: `switch v := interface{}("test").(type) { case int: println("int") case string: println("string") }|string (type switch matches concrete type)
+Predict output: `type F float64; func (f F) String() string { return fmt.Sprintf("F(%v)", f) }; fmt.Println(F(3.14))|F(3.14) (Stringer interface customizes output)
+Predict behavior: `type MyErr struct{}; func (e MyErr) Error() string { return "error" }; f := func() error { return MyErr{} }; if e := f(); e != nil { println("error") }|Prints "error" (value receiver error is never nil)
+Predict behavior: `type MyErr struct{}; func (e *MyErr) Error() string { return "error" }; f := func() error { return nil }; if e := f(); e != nil { println("error") }|Prints nothing (nil check works correctly with pointer receiver)
+What interface would you implement to define custom output format like println()?|Stringer interface: `func (t Type) String() string { ... }`
+How do you implement a custom error in Go?|Define a type with an `Error()` method: `func (e *MyError) Error() string { return "..." }`
+When writing a Reader wrapper (like rot13Reader), what must be true about its Read method?|It must have a pointer receiver: `func (r *WrapperType) Read(b []byte) (n int, err error)`
+Write a minimal custom error type that holds When (time.Time) and What (string) fields.|`type MyErr struct{When time.Time; What string}; func(e *MyErr)Error()string{return e.What+" at "+e.When.String()}`
+Implement a type assertion with fallback: if variable i holds type T, use it; else use default value|`t, ok := i.(T); if !ok { t = defaultValue }`
+Rewrite this function to use pointer receiver instead of parameter: `func Scale(p *Point, f float64) { ... }`|`func (p *Point) Scale(f float64) { ... }`
+You have `type Reader interface { Read([]byte) (int, error) }`. Does a value receiver Read() satisfy it?|No; only pointer receiver `*T` satisfies it because Read has a pointer receiver
+How would you distinguish between two different error types at runtime?|Use type assertion: `if err, ok := err.(SpecificErrorType); ok { ... }`
+Write code that safely extracts a string from `var i interface{}`|`s, ok := i.(string); if ok { use(s) }`
+What's wrong with: `type MyError struct{...}; func (e MyError) Error() string {...}` for error handling?|Value receiver means nil errors become non-nil zero values; use pointer receiver instead
+Write a struct that implements io.Reader by wrapping another Reader and transforming the data|`type TransformReader struct { r io.Reader }; func (tr *TransformReader) Read(b []byte) (int, error) { n, err := tr.r.Read(b); /* transform b[:n] */; return n, err }`
+Explain why defining Method() on Point twice (once with value, once with pointer receiver) is redundant|Both would do the same thing (modify a copy), so only one is needed; use pointer receiver for consistent mutability across the type
