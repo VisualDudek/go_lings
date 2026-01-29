@@ -1,0 +1,79 @@
+#separator:Pipe
+#html:true
+#tags:Go Methods Interfaces
+What is the syntax for declaring a method in Go?|func (receiver Type) MethodName(params) returnType
+In Go, what is the difference between a method and a function?|A method has a receiver argument between func keyword and method name; a function does not
+Can you declare methods on non-struct types in Go?|Yes, you can declare methods on any named type (e.g., type MyFloat float64)
+What is the restriction on declaring methods with receivers whose type is defined in another package?|You cannot declare methods on types from other packages (including built-in types like int)
+What does a pointer receiver allow a method to do?|Modify the original struct (the receiver points to the actual value, not a copy)
+When should you use a pointer receiver vs value receiver in Go?|Use pointer receiver when: 1) method needs to mutate receiver, 2) receiver is large (avoid copying), 3) consistency (if one method has pointer receiver, all should)
+What is the syntax for a method with a pointer receiver?|func (p *Type) MethodName(params) returnType
+What happens if you call a pointer receiver method on a value in Go?|Go automatically takes the address (&value) - this is called method indirection
+What happens if you call a value receiver method on a pointer in Go?|Go automatically dereferences the pointer (*ptr) - this is reverse method indirection
+Can you call p.Scale(10) if Scale has pointer receiver and p is Point (not *Point)?|Yes, Go interprets it as (&p).Scale(10) automatically
+Given:<br>func Scale(p *Point, f float64) { p.X *= f }<br>How do you call this function with a Point value p?|Scale(&p, factor) - must explicitly use & operator for functions
+Why use pointer receiver for read-only methods on large structs?|To avoid copying overhead - copying large structs is expensive
+What is an interface in Go?|A named collection of method signatures that a type can implement
+How does a type satisfy an interface in Go?|Implicitly, by implementing all the methods in the interface (no explicit declaration needed)
+What two things does an interface value hold internally?|A (concrete type, concrete value) tuple
+Given:<br>type Point struct {X, Y float64}<br>func (p *Point) Abs() float64 { ... }<br>Does Point or *Point satisfy an Abser interface with Abs() method?|Only *Point satisfies the interface (method has pointer receiver)
+What format verb shows the concrete type held by an interface variable?|%T
+Is an interface holding a nil concrete value the same as a nil interface?|No - interface with nil value has (type != nil, value == nil); nil interface has (type == nil, value == nil)
+What happens when you call a method on a nil interface?|Runtime panic (no type information to dispatch the method call)
+Can you call a method on an interface holding a nil value (but non-nil type)?|Yes, the method will receive nil as its receiver (method must handle this case)
+What is the empty interface in Go?|interface{} or any - can hold values of any type (zero methods required)
+What is the type assertion syntax to extract a concrete value from an interface?|value := interfaceVar.(ConcreteType)
+What happens if a type assertion fails without the "comma ok" idiom?|Runtime panic
+What is the "comma ok" idiom for type assertions?|value, ok := interfaceVar.(ConcreteType) - ok is false if assertion fails, no panic
+What is the syntax for a type switch in Go?|switch v := i.(type) { case Type1: ... case Type2: ... }
+In a type switch, what type does the variable have in each case block?|The concrete type of that case (not interface{})
+What is the Stringer interface defined in the fmt package?|type Stringer interface {<br>  String() string<br>}
+What does implementing the Stringer interface allow a type to do?|Describe itself as a string when used with fmt.Print, fmt.Println, etc.
+Given:<br>func (ip IPAddr) String() string {<br>  return fmt.Sprintf("%v", ip)<br>}<br>What is the bug?|Infinite recursion - %v calls String() method which calls String() again
+How do you fix the recursive Stringer bug when formatting the receiver?|Convert receiver to different type first: fmt.Sprintf("%v", []byte(ip))
+What is the error interface in Go?|type error interface {<br>  Error() string<br>}
+Should you implement Error() method on value or pointer receiver?|Pointer receiver - avoids copying and allows nil error checking
+Why shouldn't you use value receiver for Error() method?|Value receiver error can never be nil, breaks nil error checking idiom
+Given custom error type, how do you return it as an error?|Return &MyError{...} (pointer to error struct)
+What is the common pitfall with fmt.Sprint(e) in an Error() method where e implements error?|Infinite recursion - fmt.Sprint detects error interface and calls Error() method
+How do you fix fmt.Sprint recursion in Error() method implementation?|Convert to underlying type first: fmt.Sprint(float64(e))
+What is the io.Reader interface signature?|type Reader interface {<br>  Read(b []byte) (n int, err error)<br>}
+What does the Read method return?|Number of bytes read (n) and error (err, often io.EOF at end)
+How do you create an io.Reader from a string?|strings.NewReader("text")
+What error value indicates end of stream when reading?|io.EOF
+What does the Read method do with the byte slice parameter?|Populates the slice with data and returns number of bytes written
+When implementing a custom Reader that wraps another Reader, how do you read from the wrapped Reader?|Call wrappedReader.Read(b) and transform the bytes in b
+What does io.Copy(dst, src) do?|Copies from src Reader to dst Writer until EOF or error
+What method signature must a type implement to satisfy io.Reader?|Read(b []byte) (n int, err error)
+Given:<br>var i Abser<br>p := Point{3, 4}<br>i = p<br>If Point has value receiver for Abs(), does this work?|Yes, Point satisfies Abser
+Given:<br>var i Abser<br>p := Point{3, 4}<br>i = p<br>If Point has POINTER receiver for Abs(), does this work?|No - only *Point satisfies Abser, must use i = &p
+What is the zero value of an interface variable?|nil (both type and value are nil)
+Is Go's interface implementation explicit or implicit?|Implicit (no "implements" keyword needed)
+What helper function can you write to inspect interface contents?|func describe(i I) {<br>  fmt.Printf("(%v, %T)\n", i, i)<br>}
+When calling a function expecting *Point, must you use & explicitly?|Yes - functions require explicit address taking, unlike methods
+Can methods with pointer receivers be called on both values and pointers?|Yes - Go handles conversion automatically (method indirection)
+What is the type alias for interface{} introduced in Go 1.18?|any
+Why might you use pointer receiver even for methods that don't modify the receiver?|To avoid copying overhead when struct is large
+What package defines the Stringer interface?|fmt
+What package defines the error interface?|Built into Go (predeclared in universe block)
+What package defines the Reader interface?|io
+How do you check if an io.Reader returned an error indicating EOF?|if err == io.EOF
+What built-in function is useful for implementing Read() to fill a byte slice?|copy(dest, src) - returns number of bytes copied
+In a type switch, what does the default case handle?|Types that don't match any explicit case
+Can you define a method on a built-in type like int directly?|No - you must create a named type first (e.g., type MyInt int)
+What is method indirection?|Go's automatic conversion between values and pointers when calling methods
+If you have type MyFloat float64, can you call MyFloat methods on float64 values?|No - they are different types despite underlying type being float64
+What does it mean that interfaces are satisfied implicitly?|A type automatically satisfies an interface by implementing its methods (no declaration required)
+How do you get both value and type information from an interface variable using fmt.Printf?|Use %v for value and %T for type in fmt.Printf
+Why is (type, value) tuple important for interface values?|It allows interface to hold nil value while still knowing the type for method dispatch
+Can you call methods on a nil pointer receiver?|Yes, if the method handles nil receiver case (common pattern in Go)
+What is the difference between calling method on value vs pointer for value receiver?|No difference - both work (pointer is auto-dereferenced)
+What is the difference between calling method on value vs pointer for pointer receiver?|No difference - both work (value address is auto-taken)
+Write a simple Stringer implementation for type Person with Name and Age fields|func (p Person) String() string {<br>  return fmt.Sprintf("%s (%d years)", p.Name, p.Age)<br>}
+Write an Error() method for custom error type MyError with field What string|func (e *MyError) Error() string {<br>  return e.What<br>}
+How do you check if a type assertion succeeded without panicking?|Use two-value form: v, ok := i.(T)
+What should a Read() implementation return when there's no more data?|n (bytes read), io.EOF
+If Scale is a regular function (not method) taking *Point, can you call Scale(p, 10) when p is Point value?|No - must call Scale(&p, 10) if p is Point value
+If you see "switch v := x.(type)", what is this?|A type switch - branches based on interface's concrete type
+What two conditions make an interface variable equal to nil?|Both type and value must be nil
+When is it safe to call methods on an interface variable?|When the interface has a non-nil type (value can be nil if method handles it)
