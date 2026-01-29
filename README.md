@@ -62,6 +62,11 @@ fmt.Printf("Struct is %d bytes\n", typ.Size())
 - interface variable
     - interface variable can hold any value that implements the interface
     - the deal is that interface variable holds two things: the actual value and the type information about that value which is different from the value itself.
+- think about interface under the hood as a tuple of (type, value)
+- empty interface `interface{}` act as a generic type that can hold any value aka any type.
+- `any` is type alias for `interface{}`
+- if you want to emphasize that an interface relates to a type or method, add `-er` suffix to the interface name. e.g. `Reader`, `Writer`, `Stringer`
+- [ EPIC `Stringer()` ](./001d_tour_methods_interfaces/018_epic_bug/main.go)
 
 ### Boot.dev ideas
 - Embedded Structs
