@@ -69,6 +69,15 @@ fmt.Printf("Struct is %d bytes\n", typ.Size())
 - [ EPIC `Stringer()` ](./001d_tour_methods_interfaces/018_epic_bug/main.go)
 - Best practice: Use a pointer receiver for error types to avoid unnecessary copying and because errors often need to be returned as pointers from functions.
     - if you use value receiver for error type, you may encounter issues when trying to compare errors to `nil` bc. it will always be non-nil due to the way interfaces work in Go. -> zero value e.g. `string` will be `""` and not `nil`.
+- Why `strings.NewReader` return pointer to struct `*strings.Reader` instead of value `strings.Reader`?
+    - because `strings.Reader` has methods with pointer receivers, so to use those methods you need a pointer to the struct.
+- Return bytes by args slice, not by return - this is mind bending and very efficient.
+```go
+Read([]byte) (int, error) // Note that return value to not contain []byte
+```
+- based on `Reader` **so brilliant design**, 
+    - using named return values to return number of bytes read and error only, while the actual data is returned via the byte slice passed as argument. 
+    - by using named return values in branch where no error occurs, just init value and do naked return, which implicit return nil for error. (**brilliant!**)
 
 ### Boot.dev ideas
 - Embedded Structs
