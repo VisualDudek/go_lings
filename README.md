@@ -78,6 +78,9 @@ Read([]byte) (int, error) // Note that return value to not contain []byte
 - based on `Reader` **so brilliant design**, 
     - using named return values to return number of bytes read and error only, while the actual data is returned via the byte slice passed as argument. 
     - by using named return values in branch where no error occurs, just init value and do naked return, which implicit return nil for error. (**brilliant!**)
+- if a struct has a field that is `io.Reader`:
+    - then the struct automatically implements the `io.Reader` interface. This is because the struct can delegate the `Read` method call to its embedded `io.Reader` field. (???)
+    - you can use method `Read` on this field
 
 ### Boot.dev ideas
 - Embedded Structs
