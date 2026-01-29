@@ -1,6 +1,8 @@
 #separator:Pipe
 #html:true
 #tags:Go Methods Interfaces
+#deck:Go Methods Interfaces
+
 What is the syntax for declaring a method in Go?|func (receiver Type) MethodName(params) returnType
 In Go, what is the difference between a method and a function?|A method has a receiver argument between func keyword and method name; a function does not
 Can you declare methods on non-struct types in Go?|Yes, you can declare methods on any named type (e.g., type MyFloat float64)
