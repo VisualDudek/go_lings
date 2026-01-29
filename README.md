@@ -67,6 +67,8 @@ fmt.Printf("Struct is %d bytes\n", typ.Size())
 - `any` is type alias for `interface{}`
 - if you want to emphasize that an interface relates to a type or method, add `-er` suffix to the interface name. e.g. `Reader`, `Writer`, `Stringer`
 - [ EPIC `Stringer()` ](./001d_tour_methods_interfaces/018_epic_bug/main.go)
+- Best practice: Use a pointer receiver for error types to avoid unnecessary copying and because errors often need to be returned as pointers from functions.
+    - if you use value receiver for error type, you may encounter issues when trying to compare errors to `nil` bc. it will always be non-nil due to the way interfaces work in Go. -> zero value e.g. `string` will be `""` and not `nil`.
 
 ### Boot.dev ideas
 - Embedded Structs
