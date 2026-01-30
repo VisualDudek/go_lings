@@ -3,6 +3,7 @@ My Go learning exercises. Inspired by ZigLings
 
 - Check [ Claude go learning project ](./go-learning-project/README.md) for more structured Go learning path.
 - [ shortlist of Go libraries that are both widely used and excellent for learning practical Go skills](./GO_LIBS.md)
+- [ your cheat sheet is Go by Example ](https://gobyexample.com/)
 
 ## Anki
 Flashcards from various Go learning resources. See md files in [Anki](./Anki) directory.
@@ -103,7 +104,8 @@ func doSomething() (int, error) {
     return result, nil
 }
 ```
-- custom error with `fmt.Errorf("custom error: %v", int)` 
+- custom error with `fmt.Errorf("custom error: %v", int)` or better `errors.New("custom error")` 
+- Anti go pattern: using defer/recover for regular error handling is an anti-pattern in Go. Defer/recover should be reserved for truly exceptional situations, not for routine error handling.
 
 ### Boot.dev ideas
 - Embedded Structs
