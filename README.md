@@ -106,6 +106,10 @@ func doSomething() (int, error) {
 ```
 - custom error with `fmt.Errorf("custom error: %v", int)` or better `errors.New("custom error")` 
 - Anti go pattern: using defer/recover for regular error handling is an anti-pattern in Go. Defer/recover should be reserved for truly exceptional situations, not for routine error handling.
+- heal your future slice pain with rule of thumb:
+    - append on the same slice the result is assigned to.
+- TODO: add slice pitfalls: when you iterate over slice of structs with `for _, v := range slice` you get copy of struct, so modifying `v` does not modify original struct in slice -> need to use index to modify original struct in slice.
+- good to know `strings.Contains(s, substr string) bool` and `strings.ToLower(s string) string`
 
 ### Boot.dev ideas
 - Embedded Structs
