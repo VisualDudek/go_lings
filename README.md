@@ -110,6 +110,10 @@ func doSomething() (int, error) {
     - append on the same slice the result is assigned to.
 - TODO: add slice pitfalls: when you iterate over slice of structs with `for _, v := range slice` you get copy of struct, so modifying `v` does not modify original struct in slice -> need to use index to modify original struct in slice.
 - good to know `strings.Contains(s, substr string) bool` and `strings.ToLower(s string) string`
+- maps are passed by reference into functions.
+- Go idiom: `if _, ok := myMap[key]; ok { // key is found }` use it with `ok` or `!ok` depending on your logic.
+- create set with map using bool values: `mySet := make(map[string]bool)` and Python`in` logic: `if mySet[element] { // element is in the set }`
+- or use empty struct as value to save memory: `mySet := make(map[string]struct{})` and check existence with: `if _, ok := mySet[element]; ok { // element is in the set }`
 
 ### Boot.dev ideas
 - Embedded Structs
@@ -137,6 +141,7 @@ XXX_topic_name/
 - [ Effective Go ](https://go.dev/doc/effective_go)
 - [ go101 memory layout ](https://go101.org/article/memory-layout.html)
 - [ Go by example ](https://gobyexample.com/)
+- [ Go maps in action ](https://go.dev/blog/maps)
 
 ## Postmortem
 
