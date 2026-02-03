@@ -2,6 +2,7 @@
 My Go learning exercises. Inspired by ZigLings
 
 - Check [ Claude go learning project ](./go-learning-project/README.md) for more structured Go learning path.
+- [ Go mindset and learning strategies based on "Make It Stick" ](./MINDSETUP.md)
 - [ shortlist of Go libraries that are both widely used and excellent for learning practical Go skills](./GO_LIBS.md)
 - [ your cheat sheet is Go by Example ](https://gobyexample.com/)
 
