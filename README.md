@@ -139,9 +139,13 @@ XXX_topic_name/
 - [ Go specification ](https://go.dev/ref/spec)
 - [ wiki: Closure ](https://en.wikipedia.org/wiki/Closure_(computer_programming))
 - [ Effective Go ](https://go.dev/doc/effective_go)
+    - maps
 - [ go101 memory layout ](https://go101.org/article/memory-layout.html)
 - [ Go by example ](https://gobyexample.com/)
 - [ Go maps in action ](https://go.dev/blog/maps)
+- [ Stack vs. Heap ](https://go.dev/doc/faq#stack_or_heap)
+- [ Strings, bytes, runes and characters in Go ](https://go.dev/blog/strings)
+- [ Go FAQ ](https://go.dev/doc/faq)
 
 ## Postmortem
 
