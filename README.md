@@ -115,7 +115,22 @@ func doSomething() (int, error) {
 - Go idiom: `if _, ok := myMap[key]; ok { // key is found }` use it with `ok` or `!ok` depending on your logic.
 - create set with map using bool values: `mySet := make(map[string]bool)` and Python`in` logic: `if mySet[element] { // element is in the set }`
 - or use empty struct as value to save memory: `mySet := make(map[string]struct{})` and check existence with: `if _, ok := mySet[element]; ok { // element is in the set }`
-
+- A dir of Go code can have st most one  package. All `.go` files in that dir must declare the same package name.
+- `go install` in your repo go module will install binaries to `$GOPATH/bin` or `$GOBIN` if set. -> will build and install the package with dir name.
+- if there is not `main.go` file in the package, `go build` will build the package but not produce an executable binary, instead it will produce file which is in local cache that can be imported and used by other packages. Where is this cache located?
+    - The compiled package files are stored in the Go build cache, which is typically located in the `$GOPATH/pkg/mod/cache` directory. (???)
+- in `go.mod` `replace` directive for local module replacement during development.
+- different dir == different package
+- Clean package:
+    - Hide Internal Logic -> design package API to expose only what is necessary.
+    - Do not change API
+    - Do not export func. from the Main package
+    - Package should know about dependencies
+- channels data flow notation `<-`:
+    - `<- channel` receive from channel
+    - `channel <- value` send to channel
+    - just check at which side of notation is channel to understand direction.
+i
 ### Boot.dev ideas
 - Embedded Structs
 - Anonymous Structs
