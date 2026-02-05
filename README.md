@@ -130,7 +130,9 @@ func doSomething() (int, error) {
     - `<- channel` receive from channel
     - `channel <- value` send to channel
     - just check at which side of notation is channel to understand direction.
-i
+- ohohoh `time.Tick` returns a channel that delivers the time.
+- Web solution for "Binary Trees" are sooo different to each other (!!!)
+
 ### Boot.dev ideas
 - Embedded Structs
 - Anonymous Structs
