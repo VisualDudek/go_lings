@@ -11,6 +11,7 @@ Flashcards from various Go learning resources. See md files in [Anki](./Anki) di
 - [Go Fundamentals - Flashcards](./Anki/golang_tour_flashcards.md)
 - [Go Tour More Types - Flashcards](./Anki/001c_tour_more_types_flashcards.md)
 - [Go Methods and Interfaces - Flashcards](./Anki/go_methods_interfaces_flashcards.md)
+- [Go Concurrency Flashcards](./Anki/golang_concurrency.md)
 
 ## Pitfalls
 - [Go Struct Pitfalls (Bug-Oriented)](./go-learning-project/03-data-structures/PITFALLS.md)
