@@ -8,17 +8,17 @@ import "golang.org/x/tour/tree"
 func Walk(t *tree.Tree, ch chan int) {
 	defer close(ch) // Ensure channel is closed when Walk returns
 
-	var walkHelper func(*tree.Tree)
-	walkHelper = func(t *tree.Tree) {
+	var walk func(*tree.Tree)
+	walk = func(t *tree.Tree) {
 		if t == nil {
 			return
 		}
-		walkHelper(t.Left)
+		walk(t.Left)
 		ch <- t.Value // In-order traversal
-		walkHelper(t.Right)
+		walk(t.Right)
 	}
 
-	walkHelper(t)
+	walk(t)
 }
 
 // Same determines whether the trees

@@ -132,6 +132,7 @@ func doSomething() (int, error) {
     - just check at which side of notation is channel to understand direction.
 - ohohoh `time.Tick` returns a channel that delivers the time.
 - Web solution for "Binary Trees" are sooo different to each other (!!!)
+- inside `func Walk()` using anonymous fn. assigned to var. named `walk` is brilliant design.
 
 ### Boot.dev ideas
 - Embedded Structs
