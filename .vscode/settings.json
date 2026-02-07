@@ -4,5 +4,8 @@
         "git add": true,
         "git commit": true,
         "go": true
-    }
+    },
+    "cSpell.words": [
+        "goroutines"
+    ]
 }

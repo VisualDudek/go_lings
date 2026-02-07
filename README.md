@@ -2,7 +2,7 @@
 My Go learning exercises. Inspired by ZigLings
 
 - Check [ Claude go learning project ](./go-learning-project/README.md) for more structured Go learning path.
-- [ Go mindset and learning strategies based on "Make It Stick" ](./MINDSETUP.md)
+- [ **Go mindset and learning strategies based on "Make It Stick"** ](./MINDSETUP.md)
 - [ shortlist of Go libraries that are both widely used and excellent for learning practical Go skills](./GO_LIBS.md)
 - [ your cheat sheet is Go by Example ](https://gobyexample.com/)
 
@@ -134,6 +134,50 @@ func doSomething() (int, error) {
 - ohohoh `time.Tick` returns a channel that delivers the time.
 - Web solution for "Binary Trees" are sooo different to each other (!!!)
 - inside `func Walk()` using anonymous fn. assigned to var. named `walk` is brilliant design.
+- What is idiomatic way to wait in main fn. for goroutines to finish?
+    - Use `sync.WaitGroup` to wait for multiple goroutines to finish before exiting the main function. This allows you to coordinate the completion of concurrent tasks without blocking indefinitely or risking a deadlock.
+- "Receiving from a closed channel returns the zero value immediately" but how it is useful? I need example ...
+- receive zero value from closed channel is very useful for concurrent tree walk, it allows to signal the end of traversal without needing additional synchronization mechanisms. (???)
+- How can I use `time.After()` for timeouts?
+    - in select statement, use `case <-time.After(duration):` to trigger a timeout if no other case is ready within the specified duration. 
+- Channels are **reference types**, so when you pass a channel to a function, you are passing a reference to the channel, not a copy of it. This means that multiple goroutines can share the same channel and communicate through it without needing to worry about copying or synchronization issues that arise with value types. 
+- Channels can be used as signals to coordinate goroutines, for example by closing a channel to signal that no more values will be sent, allowing receiving goroutines to exit gracefully. `c <- struct{}{}` is a common pattern for sending a signal without any data. Read "signal channel" `<-c` to wait for the signal.
+- How the hell does this work?
+    - Why I can pass into processData() the result of downloadData() which is a channel that is created inside downloadData() and used inside the goroutine in downloadData()?
+```go
+func downloadData() chan struct{} {
+	downloadDoneCh := make(chan struct{})
+
+	go func() {
+		fmt.Println("Downloading data file...")
+		time.Sleep(2 * time.Second) // simulate download time
+
+		// after the download is done, send a "signal" to the channel
+		downloadDoneCh <- struct{}{}
+	}()
+
+	return downloadDoneCh
+}
+
+func processData(downloadDoneCh chan struct{}) {
+	// any code here can run normally
+	fmt.Println("Preparing to process data...")
+
+	// block until `downloadData` sends the signal that it's done
+	<-downloadDoneCh
+
+	// any code here can assume that data download is complete
+	fmt.Println("Data download complete, starting data processing...")
+}
+
+processData(downloadData())
+// Preparing to process data...
+// Downloading data file...
+// Data download complete, starting data processing...
+```
+- What does it mens ?"sending on a buffered channel blocks only when the buffer is full, and receiving blocks only when the buffer is empty." 
+    - For a buffered channel, you can send values into the channel without blocking until the buffer reaches its capacity. Once the buffer is full, any further sends will block until space is available (i.e., until a value is received from the channel). Conversely, receiving from a buffered channel will block only if the buffer is empty, meaning there are no values to receive. This allows for more flexible communication between goroutines, as they can proceed without blocking as long as the buffer has space or values to receive.
+- Read-only, write-only channels: `ch <-chan int` is a read-only channel, `ch chan<- int` is a write-only channel. This is useful for function parameters to indicate the intended use of the channel and to prevent accidental misuse.
 
 ### Boot.dev ideas
 - Embedded Structs
@@ -166,6 +210,7 @@ XXX_topic_name/
 - [ Stack vs. Heap ](https://go.dev/doc/faq#stack_or_heap)
 - [ Strings, bytes, runes and characters in Go ](https://go.dev/blog/strings)
 - [ Go FAQ ](https://go.dev/doc/faq)
+- [ Channel Axioms ](https://dave.cheney.net/2014/03/19/channel-axioms)
 
 ## Postmortem
 
