@@ -178,6 +178,58 @@ processData(downloadData())
 - What does it mens ?"sending on a buffered channel blocks only when the buffer is full, and receiving blocks only when the buffer is empty." 
     - For a buffered channel, you can send values into the channel without blocking until the buffer reaches its capacity. Once the buffer is full, any further sends will block until space is available (i.e., until a value is received from the channel). Conversely, receiving from a buffered channel will block only if the buffer is empty, meaning there are no values to receive. This allows for more flexible communication between goroutines, as they can proceed without blocking as long as the buffer has space or values to receive.
 - Read-only, write-only channels: `ch <-chan int` is a read-only channel, `ch chan<- int` is a write-only channel. This is useful for function parameters to indicate the intended use of the channel and to prevent accidental misuse.
+- `sync.Mutex` is NOT a reference type, do not copy it, pass pointer to it. 
+    - check Usage Patterns.
+- for read-intensive processes, use `sync.RWMutex` which allows multiple readers but only one writer at a time.
+- why generics exist in Go? to avoid following code duplication:
+```go
+func splitIntSlice(s []int) ([]int, []int) {
+    mid := len(s) / 2
+    return s[:mid], s[mid:]
+}
+
+func splitStringSlice(s []string) ([]string, []string) {
+    mid := len(s) / 2
+    return s[:mid], s[mid:]
+}
+
+// with generics you can have:
+func splitSlice[T any](s []T) ([]T, []T) {
+    mid := len(s) / 2
+    return s[:mid], s[mid:]
+}
+```
+- Zero value of a Generic type `var myZero T`
+- huge leverage of generics to use as type interface such as `func concat[T stringer](vals []T) string {}`
+- "syntax sugar" for type constraints -> use interface type list (type set) to specify multiple types that satisfy the constraint, instead of defining separate interfaces for each type.
+```go
+type Ordered interface {
+    ~int | ~float64 | ~string
+}
+
+func Min[T Ordered](a, b T) T {
+    if a < b {
+        return a
+    }
+    return b
+}
+```
+- Interface definition can accept type parameters as well.
+- What Golang is missing?
+    - Enums e.g. Rust Result type
+    - union types
+- Golang "union type" broken solution:
+```go
+type perm string
+
+const (
+    Read perm = "read"
+    Write perm = "write"
+    Execute perm = "execute"
+)
+
+func checkPermission(p perm) {}
+```
 
 ### Boot.dev ideas
 - Embedded Structs
@@ -211,6 +263,9 @@ XXX_topic_name/
 - [ Strings, bytes, runes and characters in Go ](https://go.dev/blog/strings)
 - [ Go FAQ ](https://go.dev/doc/faq)
 - [ Channel Axioms ](https://dave.cheney.net/2014/03/19/channel-axioms)
+- [ The Grug Brained Developer ](https://grugbrain.dev/)
+- [ Go Proverbs ](https://go-proverbs.github.io/)
+- [ Gopherfest Go Proverbs ](https://www.youtube.com/watch?v=PAAkCSZUG1c)
 
 ## Postmortem
 

@@ -6,6 +6,9 @@
         "go": true
     },
     "cSpell.words": [
-        "goroutines"
+        "Gopherfest",
+        "goroutines",
+        "Grug",
+        "justfile"
     ]
 }
