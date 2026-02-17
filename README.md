@@ -230,6 +230,73 @@ const (
 
 func checkPermission(p perm) {}
 ```
+- (???) `cURL` is a cmd tool for transferring data using **various protocols**.
+- `curl https://jsonplaceholder.typicode.com/users/1` 
+- `jq` Basics, get:
+ - name field: `jq '.name'`
+ - field from each element in array: `jq '.[].name'`
+ - multiple fields: `jq '.name, .email'`
+
+### encoding/json
+- `json.NewDecoder(r io.Reader) *json.Decoder` creates a new JSON decoder that reads from the provided `io.Reader`. This allows you to decode JSON data from various sources, such as files, network connections, or in-memory buffers, by passing the appropriate `io.Reader` implementation.
+- `func (dec *Decoder) Decode(v interface{}) error` is a method of the `json.Decoder` type that decodes JSON data from the underlying `io.Reader` and stores it in the value pointed to by `v`. The `v` parameter is typically a pointer to a struct or a map where the decoded JSON data will be stored. The method returns an error if the decoding process fails, such as when the JSON data is malformed or does not match the structure of `v`. 
+- `func json.Marshal(v interface{}) ([]byte, error)` is a function that takes an input value `v` and encodes it into JSON format. The function returns a byte slice containing the JSON representation.
+
+### net/http
+- `type Client struct` is a struct that represents an HTTP client. It has methods for making HTTP requests, such as `Get`, `Post`, etc. The `Client` struct also has fields for configuring the client's behavior, such as timeouts, transport settings, etc. By using a `Client`, you can customize how your HTTP requests are made and handle responses more effectively.
+- `func (c *Client) Do(req *http.Request) (*http.Response, error)` 
+- `type http.Response struct` have fields such as `Header` and `Header` have methods such as `Get` to access specific header values. 
+- simple `http.Get` vs. verbose and more powerful `http.Client` with `Do` method.
+- (???) why do I need to call `resp.Body.Close()` after reading the response body? 
+- package provide loots of useful constants for HTTP status codes, such as `http.StatusOK`, `http.StatusNotFound`, etc. 
+
+### net/url
+- `url.Parse(rawURL string) (*url.URL, error)` 
+- `type URL struct` have fields such as `Scheme`, `Host`, `Path`, etc. and methods such as `String()` to get the string representation of the URL.
+
+### bad vs. good
+```go
+// BAD
+package main
+
+func fetchTasks(baseURL, availability string) []Issue {
+	query := "?" + "sort=estimate" + "&limit="
+
+	var limit string
+	
+	switch availability {
+	case "Low":
+		limit = "1"
+	case "Medium":
+		limit = "3"
+	case "High":
+		limit = "5"
+	}
+
+	fullURL := baseURL + query + limit
+	return getIssues(fullURL)
+}
+```
+```go
+// GOOD
+package main
+
+import (
+	"fmt"
+)
+
+func fetchTasks(baseURL, availability string) []Issue {
+	amountofIssues := map[string]int{
+		"Low":    1,
+		"Medium": 3,
+		"High":   5,
+	}
+
+	fullURL := fmt.Sprintf("%s?sort=estimate&limit=%d", baseURL, amountofIssues[availability])
+	return getIssues(fullURL)
+}
+
+```
 
 ### Boot.dev ideas
 - Embedded Structs
@@ -266,6 +333,7 @@ XXX_topic_name/
 - [ The Grug Brained Developer ](https://grugbrain.dev/)
 - [ Go Proverbs ](https://go-proverbs.github.io/)
 - [ Gopherfest Go Proverbs ](https://www.youtube.com/watch?v=PAAkCSZUG1c)
+- [ curl tutorial ](https://curl.se/docs/tutorial.html)
 
 ## Postmortem
 
