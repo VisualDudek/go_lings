@@ -16,6 +16,10 @@ Flashcards from various Go learning resources. See md files in [Anki](./Anki) di
 ## Pitfalls
 - [Go Struct Pitfalls (Bug-Oriented)](./go-learning-project/03-data-structures/PITFALLS.md)
 
+## Prompts
+- [Go Extractor Prompt](./.github/prompts/go-extractor.prompt.md) - Extract golang topics from code or documentation md files.
+- [Go Coding Challenge Prompt](./.github/prompts/coding-challenge.prompt.md) - Create coding challenge covering a specific Go topic.
+
 ## Q
 - How to ignore staticcheck in VS Code and `go vet`? Is it even possible?
 - What is `./...` pattern in Go?
